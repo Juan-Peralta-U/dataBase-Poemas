@@ -2,17 +2,16 @@
 #define LISTA_H
 
 #include <iostream>
-template <class T, class S>
+template <class T>
 struct nodo {
   T dato1;
-  S dato2;
-  nodo<T, S>* sig;
+  nodo<T>* sig;
 };
 
-template <class T, class S>
+template <class T>
 class Lista {
   int numElem;
-  nodo<T, S>* cab;
+  nodo<T>* cab;
 
  public:
   Lista() {
@@ -22,55 +21,53 @@ class Lista {
 
   bool listaVacia() { return (cab == nullptr); }
 
-  void insertarInicio(T info1, S info2);
-  void insertarFinal(T info1, S info2);
-  void insertarPos(T info1, S info2, int pos);
+  void insertarInicio(T info1);
+  void insertarFinal(T info1);
+  void insertarPos(T info1, int pos);
 
   bool borrarPos(int pos);
-  nodo<T, S>* buscarPos(int pos);
-  bool modificarPos(T info1, S info2, int pos);
+  nodo<T>* buscarPos(int pos);
+  bool modificarPos(T info1, int pos);
   void vaciarLista();
 
   void imprimirLista();
 
   ~Lista() { vaciarLista(); };
 };
-template <typename T, typename S>
-void Lista<T, S>::insertarInicio(T info1, S info2) {
-  nodo<T, S>* aux = new nodo<T, S>;
+template <typename T>
+void Lista<T>::insertarInicio(T info1) {
+  nodo<T>* aux = new nodo<T>;
   aux->dato1 = info1;
-  aux->dato2 = info2;
   aux->sig = cab;
   cab = aux;
   numElem++;
 }
 
-template <class T, class S>
-void Lista<T, S>::insertarFinal(T info1, S info2) {
-  nodo<T, S>* aux = new nodo<T, S>;
+template <class T>
+void Lista<T>::insertarFinal(T info1) {
+  nodo<T>* aux = new nodo<T>;
   aux->dato1 = info1;
-  aux->dato2 = info2;
   aux->sig = nullptr;
 
   if (listaVacia())
     cab = aux;
   else {
-    nodo<T, S>* fin = cab;
+    nodo<T>* fin = cab;
     while (fin->sig != nullptr) fin = fin->sig;
     fin->sig = aux;
   }
   numElem++;
 }
 
-template <class T, class S>
-void Lista<T, S>::insertarPos(T info1, S info2, int pos) {
+template <class T>
+void Lista<T>::insertarPos(T info1, int pos) {
   if (pos == 0) {
-    insertarInicio(info1, info2);
+    insertarInicio(info1);
     return;
   }
 
   if (pos == numElem) {
-    insertarFinal(info1, info2);
+    insertarFinal(info1);
     return;
   }
 
@@ -79,12 +76,11 @@ void Lista<T, S>::insertarPos(T info1, S info2, int pos) {
     return;
   }
 
-  nodo<T, S>* ins = cab;
+  nodo<T>* ins = cab;
   for (int i = 0; i < pos - 1; i++) ins = ins->sig;
 
-  nodo<T, S>* aux = new nodo<T, S>;
+  nodo<T>* aux = new nodo<T>;
   aux->dato1 = info1;
-  aux->dato2 = info2;
 
   aux->sig = ins->sig;
   ins->sig = aux;
@@ -92,14 +88,14 @@ void Lista<T, S>::insertarPos(T info1, S info2, int pos) {
   numElem++;
 }
 
-template <class T, class S>
-nodo<T, S>* Lista<T, S>::buscarPos(int pos) {
+template <class T>
+nodo<T>* Lista<T>::buscarPos(int pos) {
   if (pos < 0 || pos > numElem) {
     std::cerr << "posicion fuera de rango\n";
     return nullptr;
   }
 
-  nodo<T, S>* aux = cab;
+  nodo<T>* aux = cab;
   for (int i = 0; i < pos; i++) {
     aux = aux->sig;
   }
@@ -107,10 +103,10 @@ nodo<T, S>* Lista<T, S>::buscarPos(int pos) {
   return aux;
 }
 
-template <class T, class S>
-bool Lista<T, S>::borrarPos(int pos) {
+template <class T>
+bool Lista<T>::borrarPos(int pos) {
   if (pos < 0 || pos >= numElem || listaVacia()) return false;
-  nodo<T, S>* aux = cab;
+  nodo<T>* aux = cab;
 
   if (pos == 0) {
     cab = cab->sig;
@@ -119,7 +115,7 @@ bool Lista<T, S>::borrarPos(int pos) {
     return true;
   }
 
-  nodo<T, S>* borrarCab = buscarPos(pos - 1);
+  nodo<T>* borrarCab = buscarPos(pos - 1);
   aux = borrarCab->sig->sig;
   delete borrarCab->sig;
 
@@ -129,21 +125,20 @@ bool Lista<T, S>::borrarPos(int pos) {
   return true;
 }
 
-template <class T, class S>
-bool Lista<T, S>::modificarPos(T info1, S info2, int pos) {
-  nodo<T, S>* aux = buscarPos(pos);
+template <class T>
+bool Lista<T>::modificarPos(T info1, int pos) {
+  nodo<T>* aux = buscarPos(pos);
 
   if (aux == nullptr) return false;
 
   aux->dato1 = info1;
-  aux->dato2 = info2;
   return true;
 }
 
-template <class T, class S>
-void Lista<T, S>::vaciarLista() {
-  nodo<T, S>* aux1 = cab;
-  nodo<T, S>* aux2;
+template <class T>
+void Lista<T>::vaciarLista() {
+  nodo<T>* aux1 = cab;
+  nodo<T>* aux2;
   while (aux1 != nullptr) {
     aux2 = aux1->sig;
     delete aux1;
@@ -153,15 +148,15 @@ void Lista<T, S>::vaciarLista() {
   numElem = 0;
 }
 
-template <class T, class S>
-void Lista<T, S>::imprimirLista() {
+template <class T>
+void Lista<T>::imprimirLista() {
   std::cerr << "[";
   if (listaVacia()) {
     std::cerr << "]";
     return;
   }
 
-  nodo<T, S>* fin = cab;
+  nodo<T>* fin = cab;
   while (fin != nullptr) {
     std::cerr << "(" << fin->dato1 << ", " << fin->dato2 << "), ";
     fin = fin->sig;
