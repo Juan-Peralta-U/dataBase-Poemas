@@ -27,5 +27,6 @@ struct ObraPoetica {
   tipoObra obra;
   std::string nombre;
   // TODO CAMBIAR unsigned int a lista de nodos
+  // TODO Cambiar Tree a un pointer para que el conteo editorial se comparta
   // TreeRB<50, Lista<class T>> listaEdiciones;
 };
