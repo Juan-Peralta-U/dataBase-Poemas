@@ -13,7 +13,7 @@ private:
 public:
     ControladorObras() {}
 
-    // Métodos base que puedes implementar luego
+    // Métodos base
     void insertarObra(const ObraPoetica& obra);
     void listarObrasPorAnio();
     void buscarObrasPorAutor(int idAutor);
