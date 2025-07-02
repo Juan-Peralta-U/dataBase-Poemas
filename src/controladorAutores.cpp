@@ -11,7 +11,6 @@ private:
 
 public:
     void agregarAutor(const datosAutor& autor) {
-        // TODO: Insertar en las listas según los criterios
         listaPorCiudadResidencia.insertarFinal(autor);
         listaPorAñoInicio.insertarFinal(autor);
         listaPorAñoPublicacion.insertarFinal(autor);
@@ -23,5 +22,4 @@ public:
         listaPorCiudadResidencia.imprimirLista();
     }
 
-    // Los demás métodos puedes agregarlos igual si necesitas
 };
