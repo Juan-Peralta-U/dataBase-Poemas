@@ -16,44 +16,104 @@ void mostrarMenu(const string& titulo, const string opciones[], int numOpciones)
 
 void ejecutarAccion(int menu, int opcion) {
     switch (menu) {
-        case 1:
+        case 1: //Obras
             switch (opcion) {
-                case 1: cout << "Agregar una nueva obra." << endl; break;
-                case 2: cout << "Consultar obras existentes." << endl; break;
-                case 3: cout << "Modificar informacion de una obra." << endl; break;
-                case 4: cout << "Eliminar una obra." << endl; break;
-                case 5: cout << "Volviendo al menu principal..." << endl; break;
-                default: cout << "Opcion no valida." << endl;
+                case 1: 
+                    cout << "Agregar una nueva obra." << endl; 
+                    //logica para agregar una obra
+                    break;
+                case 2: 
+                    cout << "Consultar obras existentes." << endl; 
+                    //logica para consultar obras
+                    break;
+                case 3: 
+                    cout << "Modificar informacion de una obra." << endl; 
+                    //logica para modificar una obra
+                    break;
+                case 4: 
+                    cout << "Eliminar una obra." << endl; 
+                    //logica para eliminar una obra
+                    break;
+                case 5: 
+                    cout << "Volviendo al menu principal..." << endl; 
+                    break;
+                default: 
+                    cout << "Opcion no valida." << endl;
             }
             break;
-        case 2:
-            switch (opcion) {
-                case 1: cout << "Agregar edicion a una obra existente." << endl; break;
-                case 2: cout << "Consultar ediciones por obra." << endl; break;
-                case 3: cout << "Modificar datos de una edicion." << endl; break;
-                case 4: cout << "Eliminar edicion." << endl; break;
-                case 5: cout << "Volviendo al menu principal..." << endl; break;
-                default: cout << "Opcion no valida." << endl;
+        case 2: // Ediciones
+switch (opcion) {
+                case 1: 
+                    cout << "Agregar edicion a una obra existente." << endl; 
+                    //logica para agregar una edición
+                    break;
+                case 2: 
+                    cout << "Consultar ediciones por obra." << endl; 
+                    //logica para consultar ediciones
+                    break;
+                case 3: 
+                    cout << "Modificar datos de una edición." << endl; 
+                    //logica para modificar una edición
+                    break;
+                case 4: 
+                    cout << "Eliminar edicion." << endl; 
+                    //logica para eliminar una edición
+                    break;
+                case 5: 
+                    cout << "Volviendo al menu principal..." << endl; 
+                    break;
+                default: 
+                    cout << "Opcion no valida." << endl;
             }
             break;
-        case 3:
+        case 3: // Autores
             switch (opcion) {
-                case 1: cout << "Agregar un nuevo autor." << endl; break;
-                case 2: cout << "Consultar autores existentes." << endl; break;
-                case 3: cout << "Modificar informacion de un autor." << endl; break;
-                case 4: cout << "Eliminar un autor." << endl; break;
-                case 5: cout << "Volviendo al menu principal..." << endl; break;
-                default: cout << "Opcion no valida." << endl;
+                case 1: 
+                    cout << "Agregar un nuevo autor." << endl; 
+                    //logica para agregar un autor
+                    break;
+                case 2: 
+                    cout << "Consultar autores existentes." << endl; 
+                    //logica para consultar autores
+                    break;
+                case 3: 
+                    cout << "Modificar informacion de un autor." << endl; 
+                    //logica para modificar un autor
+                    break;
+                case 4: 
+                    cout << "Eliminar un autor." << endl; 
+                    //logica para eliminar un autor
+                    break;
+                case 5: 
+                    cout << "Volviendo al menu principal..." << endl; 
+                    break;
+                default: 
+                    cout << "Opcion no valida." << endl;
             }
             break;
-        case 4:
+ case 4: // Editoriales
             switch (opcion) {
-                case 1: cout << "Agregar una nueva editorial." << endl; break;
-                case 2: cout << "Consultar editoriales existentes." << endl; break;
-                case 3: cout << "Modificar informacion de una editorial." << endl; break;
-                case 4: cout << "Eliminar una editorial." << endl; break;
-                case 5: cout << "Volviendo al menu principal..." << endl; break;
-                default: cout << "Opcion no valida." << endl;
+                case 1: 
+                    cout << "Agregar una nueva editorial." << endl; 
+                    //logica para agregar una editorial
+                    break;
+                case 2: 
+                    cout << "Consultar editoriales existentes." << endl; 
+                    //logica para consultar editoriales
+                    break;
+                case 3: 
+                    cout << "Modificar informacion de una editorial." << endl; 
+                    //logica para modificar una editorial
+                    break;
+                case 4: 
+                    cout << "Eliminar una editorial." << endl; 
+                    //logica para eliminar una editorial
+                    break;
+                case 5: 
+                    cout << "Volviendo al menu principal..." << endl; 
+                    break;
+                default: 
+                    cout << "Opcion no valida." << endl;
             }
             break;
         case 5:
@@ -63,9 +123,7 @@ void ejecutarAccion(int menu, int opcion) {
                 case 3: cout << "Consulta avanzada 3." << endl; break;
                 case 4: cout << "Consulta avanzada 4." << endl; break;
                 case 5: cout << "Consulta avanzada 5." << endl; break;
-                case 6: cout << "Consulta avanzada 6." << endl; break;
-                case 7: cout << "Consulta avanzada 7." << endl; break;
-                case 8: cout << "Volviendo al menu principal..." << endl; break;
+                case 6: cout << "Volviendo al menu principal..." << endl; break;
                 default: cout << "Opcion no valida." << endl;
             }
             break;
@@ -134,19 +192,21 @@ void ejecutarVista() {
         cout << "               BIENVENIDO A POESIA LIBRERIA" << endl;
         cout << linea << endl;
         cout << "1. Gestionar Obras Poeticas\n2. Gestionar Ediciones\n3. Gestionar Autores\n4. Gestionar Editoriales\n5. Realizar Consultas Avanzadas\n6. Guardar y salir\n";
+        cout << linea << endl;
         cout << "Ingresa el numero de la opcion: ";
         cin >> opcion;
 
         switch (opcion) {
+            // submenus
             case 1: gestionarMenu("Gestion de Obras Poeticas", opcionesObras, 5, 1); break;
-            case 2: gestionarMenu("Gestion de Ediciones", opcionesEdiciones, 5, 2); break;
-            case 3: gestionarMenu("Gestion de Autores", opcionesAutores, 5, 3); break;
-            case 4: gestionarMenu("Gestion de Editoriales", opcionesEditoriales, 5, 4); break;
-            case 5: gestionarMenu("Consultas Avanzadas", opcionesConsultas, 8, 5); break;
+            case 2: gestionarMenu("Gestion de Ediciones", opcionesEdiciones, sizeof(opcionesEdiciones)/sizeof(opcionesEdiciones[0]), 2); break;
+            case 3: gestionarMenu("Gestion de Autores", opcionesAutores, sizeof(opcionesAutores)/sizeof(opcionesAutores[0]), 3); break;
+            case 4: gestionarMenu("Gestion de Editoriales", opcionesEditoriales, sizeof(opcionesEditoriales)/sizeof(opcionesEditoriales[0]), 4); break;
+            case 5: gestionarMenu("Consultas Avanzadas", opcionesConsultas, sizeof(opcionesConsultas) / sizeof(opcionesConsultas[0]), 5); break;
             case 6: cout << "Guardando cambios y saliendo del sistema..." << endl; break;
-            default: cout << "Opcion no valida." << endl;
+            default: cout << "Opcion no valida. Por favor, intenta de nuevo." << endl;
         }
     } while (opcion != 6);
-
     cout << "Gracias por usar el sistema. Hasta luego!" << endl;
+    return 0;
 }
