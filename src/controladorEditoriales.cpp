@@ -1,17 +1,16 @@
-#include "lista.h"
+#include "listaOrd.h"
 #include "m_Editorial.h"
 
 class ControladorEditoriales {
  private:
-  Lista<datosEditorial> listaPorNombreEditorial;
-  Lista<datosEditorial> listaPorNumPublicaciones;
+  ListaOrd<datosEditorial, char> listaPorNombreEditorial;
+  ListaOrd<datosEditorial, int> listaPorNumPublicaciones;
 
  public:
   void agregarEditorial(const datosEditorial& editorial) {
-    listaPorNombreEditorial.insertarFinal(editorial);
-    listaPorNumPublicaciones.insertarFinal(
-        editorial);  // ordenar por publicaciones con el size
+    listaPorNombreEditorial.insertarClave(editorial,
+                                          editorial.nombreEditorial[0]);
+    // listaPorNumPublicaciones.insertarClave(
+    // editorial, );  // ordenar por publicaciones con el size
   }
-
-  void listarEditorialesPorNombre() { listaPorNombreEditorial.imprimirLista(); }
 };
