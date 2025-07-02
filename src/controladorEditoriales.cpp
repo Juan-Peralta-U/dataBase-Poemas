@@ -9,7 +9,7 @@ private:
 public:
     void agregarEditorial(const datosEditorial& editorial) {
         listaPorNombreEditorial.insertarFinal(editorial);
-        listaPorNumPublicaciones.insertarFinal(editorial);
+        listaPorNumPublicaciones.insertarFinal(editorial);// ordenar por publicaciones con el size
     }
 
     void listarEditorialesPorNombre() {
