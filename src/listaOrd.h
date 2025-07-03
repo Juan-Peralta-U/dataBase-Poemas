@@ -24,7 +24,7 @@ class ListaOrd {
 
   void insertarClave(T info1, S clave);
 
-  bool borrarClave(S clave);
+  bool borrarClave(S clave, T reference);
   nodoOrd<T, S>* buscarClave(S clave);
   bool modificarPos(T info1, int pos);
   void vaciarLista();
@@ -67,14 +67,15 @@ void ListaOrd<T, S>::insertarClave(T info1, S clave) {
 }
 
 template <class T, typename S>
-bool ListaOrd<T, S>::borrarClave(S clave) {
+bool ListaOrd<T, S>::borrarClave(S clave, T reference) {
   if (listaVacia()) return false;
 
   nodoOrd<T, S>* actual = cab;
   nodoOrd<T, S>* anterior = nullptr;
 
   // Buscar nodo con clave igual o mayor (aprovecha orden)
-  while (actual != nullptr && actual->clave < clave) {
+  while (actual != nullptr && actual->clave < clave &&
+         actual->dato1 != reference) {
     anterior = actual;
     actual = actual->sig;
   }
