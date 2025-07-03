@@ -1,7 +1,7 @@
 #include <string>
 
 #include "lista.h"
-#include "treeRB.h"
+#include "m_edicion.h"
 
 /*
 Datos de la obra poética.
@@ -26,7 +26,5 @@ struct ObraPoetica {
   unsigned int IDAUTOR;
   tipoObra obra;
   std::string nombre;
-  // TODO CAMBIAR unsigned int a lista de nodos
-  // TODO Cambiar Tree a un pointer para que el conteo editorial se comparta
-  // TreeRB<50, Lista<class T>> listaEdiciones;
+  Lista<datosEdiccion> ediciones;
 };

@@ -8,7 +8,7 @@ Datos de la edición
     • Ciudad de publicación.
 */
 
-struct ObraPoetica {
+struct datosEdiccion {
   unsigned int IDEDITORIAL;
   unsigned int numeroEdicion;
   std::string fechaDePublicacion, ciudadDePublicacion;
