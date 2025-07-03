@@ -1,3 +1,4 @@
+
 #ifndef LISTAORD_H
 #define LISTAORD_H
 
@@ -6,10 +7,12 @@ template <typename T, typename S>
 struct nodoOrd {
   T dato1;
   nodoOrd<T, S>* sig;
+
   S clave;
 };
 
 template <class T, typename S>
+
 class ListaOrd {
   int numElem;
   nodoOrd<T, S>* cab;
@@ -56,6 +59,7 @@ void ListaOrd<T, S>::insertarClave(T info1, S clave) {
 
   // Búsqueda del punto de inserción
   nodoOrd<T, S>* actual = cab;
+
   while (actual->sig != nullptr && actual->sig->clave <= clave) {
     actual = actual->sig;
   }
@@ -105,7 +109,7 @@ nodoOrd<T, S>* ListaOrd<T, S>::buscarClave(S clave) {
 
   // Aprovecha el orden de la lista para búsqueda temprana
   while (actual != nullptr && actual->clave < clave) {
-    actual = actual->sig;
+    actual = actual->sig;,
   }
 
   // Verificar si encontramos el nodo con la clave exacta
