@@ -32,6 +32,16 @@ class Lista {
 
   void imprimirLista();
 
+  int getTam() const { return numElem; }
+
+  // Devuelve el dato en la posición pos (0-based)
+  T get(int pos) const {
+    nodo<T>* aux = cab;
+    for (int i = 0; i < pos && aux != nullptr; ++i) aux = aux->sig;
+    if (aux) return aux->dato1;
+    throw std::out_of_range("Posición fuera de rango en get()");
+  }
+
   ~Lista() { vaciarLista(); };
 };
 template <typename T>

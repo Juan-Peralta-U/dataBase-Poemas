@@ -208,5 +208,4 @@ void ejecutarVista() {
         }
     } while (opcion != 6);
     cout << "Gracias por usar el sistema. Hasta luego!" << endl;
-    return 0;
 }
