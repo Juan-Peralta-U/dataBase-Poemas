@@ -3,13 +3,13 @@
 
 class ControladorEditoriales {
  private:
-  ListaOrd<datosEditorial, char> listaPorNombreEditorial;
-  ListaOrd<datosEditorial, int> listaPorNumPublicaciones;
+  ListaOrd<datosEditorial*, char> listaPorNombreEditorial;
+  ListaOrd<datosEditorial*, int> listaPorNumPublicaciones;
 
  public:
-  void agregarEditorial(const datosEditorial& editorial) {
+  void agregarEditorial(datosEditorial* editorial) {
     listaPorNombreEditorial.insertarClave(editorial,
-                                          editorial.nombreEditorial[0]);
+                                          editorial->nombreEditorial[0]);
     // listaPorNumPublicaciones.insertarClave(
     // editorial, );  // ordenar por publicaciones con el size
   }
