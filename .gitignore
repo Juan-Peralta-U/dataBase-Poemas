@@ -7,3 +7,7 @@
 
 #build folders
 /[Bb]uild
+
+
+#IDE folders 
+/.vscode

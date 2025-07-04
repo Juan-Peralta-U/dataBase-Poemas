@@ -109,7 +109,7 @@ nodoOrd<T, S>* ListaOrd<T, S>::buscarClave(S clave) {
 
   // Aprovecha el orden de la lista para búsqueda temprana
   while (actual != nullptr && actual->clave < clave) {
-    actual = actual->sig;,
+    actual = actual->sig;
   }
 
   // Verificar si encontramos el nodo con la clave exacta

@@ -35,7 +35,7 @@ class ControladorAutores {
 
   void modificarAutor(int ID_Autor, bool sexo, int añoInicio,
                       int añoPublicacion, int fechaNacimiento[3],
-                      formacion formacion, std::string nombre,
+                      Formacion formacion, std::string nombre,
                       std::string Apellido, std::string ciudadResidencia,
                       std::string paisNacimiento,
                       std::string cidudadNacimiento) {

@@ -1,6 +1,6 @@
-#include "VistaControlador.cpp"
+#include "VistaControlador.h"
 
 int main() {
-    ejecutarVista();  // Llama a la función principal que muestra el menú
-    return 0;
+  ejecutarVista();
+  return 0;
 }
