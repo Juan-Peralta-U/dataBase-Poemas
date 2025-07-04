@@ -1,5 +1,6 @@
 #include <string>
 
+#include "lista.h"
 #include "listaOrd.h"
 #include "m_obrapoetica.h"
 #include "treeRB.h"
@@ -7,8 +8,8 @@
 class ControladorObras {
  private:
   ListaOrd<ObraPoetica*, int> listaPorAnioPublicacion;
-  ListaOrd<ObraPoetica*, tipoObra> listaPorTipoPoesia;
   ListaOrd<ObraPoetica*, unsigned int> listaPorIDAutor;
+  ListaOrd<ObraPoetica*, tipoObra> listaPorTipoPoesia;
   ListaOrd<ObraPoetica*, unsigned int> listaPorIDEditorial;
   TreeRB<100, ObraPoetica*> arbolObra;  // Clave = IDOBRA
 
@@ -91,5 +92,28 @@ class ControladorObras {
         break;
       }
     }
+  }
+
+  std::string dataParse() {
+    if (listaPorIDAutor.listaVacia()) return "No hay ninguna obra";
+
+    nodoOrd<ObraPoetica*, unsigned int>* aux = listaPorIDAutor.buscarPos(0);
+
+    std::string ret;
+
+    for (int i = 0; i < listaPorIDAutor.getSize(); i++) {
+      /*
+      Datos de la obra poética.
+          • Nombre del documento
+          • Tipo de poesía: décima, soneto, himno, haiku, romance, octava
+      real, lira, verso libre. • ID del autor. • Listado de las ediciones
+      */
+      ret = i + ":\n" + "Titulo: " + aux->dato1->nombre +
+            "\nTipo de Poesia: " + tiposPoema[aux->dato1->obra] +
+            "\nTODO: Parse Autor"
+            "\n---------------------------------------------\n";
+    }
+
+    return "ret";
   }
 };

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 
+#include "VistaObras.h"
+
 // Declaraciones de funciones
 void mostrarMenu(const std::string& titulo, const std::string opciones[],
                  int numOpciones);

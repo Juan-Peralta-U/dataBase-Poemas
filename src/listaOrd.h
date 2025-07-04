@@ -1,4 +1,3 @@
-
 #ifndef LISTAORD_H
 #define LISTAORD_H
 
@@ -23,12 +22,12 @@ class ListaOrd {
     cab = nullptr;
   }
 
+  int getSize() { return numElem; }
   bool listaVacia() { return (cab == nullptr); }
-
   void insertarClave(T info1, S clave);
-
   bool borrarClave(S clave, T reference);
   nodoOrd<T, S>* buscarClave(S clave);
+  nodoOrd<T, S>* buscarPos(int pos);
   bool modificarPos(T info1, int pos);
   void vaciarLista();
 
@@ -132,6 +131,21 @@ void ListaOrd<T, S>::vaciarLista() {
   }
   cab = nullptr;
   numElem = 0;
+}
+
+template <class T, typename S>
+nodoOrd<T, S>* ListaOrd<T, S>::buscarPos(int pos) {
+  if (pos < 0 || pos > numElem) {
+    std::cerr << "posicion fuera de rango\n";
+    return nullptr;
+  }
+
+  nodoOrd<T, S>* aux = cab;
+  for (int i = 0; i < pos; i++) {
+    aux = aux->sig;
+  }
+
+  return aux;
 }
 
 #endif

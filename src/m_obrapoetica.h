@@ -13,15 +13,19 @@ verso libre. • ID del autor. • Listado de las ediciones
 
 */
 
+const extern char* tiposPoema[] = {"Decima", "Soneto",     "Himno",
+                                   "Haiku",  "Romance",    "Octava Real",
+                                   "Lira",   "Verso Libre"};
+
 enum tipoObra {
-  decima,
-  soneto,
-  himno,
-  haiku,
-  romance,
-  octavaReal,
-  lira,
-  versoLibre
+  decima = 0,
+  soneto = 1,
+  himno = 2,
+  haiku = 3,
+  romance = 4,
+  octavaReal = 5,
+  lira = 6,
+  versoLibre = 7
 };
 
 struct ObraPoetica {
