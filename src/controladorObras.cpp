@@ -1,8 +1,8 @@
+#include <string>
+
 #include "listaOrd.h"
 #include "m_obrapoetica.h"
-#include "m_edicion.h"
 #include "treeRB.h"
-#include <string>
 
 class ControladorObras {
  private:
@@ -14,12 +14,14 @@ class ControladorObras {
 
  public:
   // Agregar una obra (sin ediciones)
-  void agregarObra(unsigned int IDOBRA, unsigned int IDAUTOR, tipoObra obraTipo, const std::string& nombre) {
+  void agregarObra(unsigned int IDOBRA, unsigned int IDAUTOR, tipoObra obraTipo,
+                   const std::string& nombre) {
     ObraPoetica* nueva = new ObraPoetica{IDAUTOR, obraTipo, nombre};
     listaPorTipoPoesia.insertarClave(nueva, obraTipo);
     listaPorIDAutor.insertarClave(nueva, IDAUTOR);
     arbolObra.add(IDOBRA, nueva);
-    // No se agrega a listaPorAnioPublicacion ni listaPorIDEditorial hasta que tenga ediciones
+    // No se agrega a listaPorAnioPublicacion ni listaPorIDEditorial hasta que
+    // tenga ediciones
   }
 
   void eliminarObra(unsigned int IDOBRA) {
@@ -40,7 +42,8 @@ class ControladorObras {
     delete del;
   }
 
-  void modificarObra(unsigned int IDOBRA, unsigned int nuevoIDAUTOR, tipoObra nuevoTipo, const std::string& nuevoNombre) {
+  void modificarObra(unsigned int IDOBRA, unsigned int nuevoIDAUTOR,
+                     tipoObra nuevoTipo, const std::string& nuevoNombre) {
     ObraPoetica* aux = arbolObra.getNodeKey(IDOBRA)->data;
     if (aux->obra != nuevoTipo) {
       listaPorTipoPoesia.borrarClave(aux->obra, aux);
@@ -64,7 +67,8 @@ class ControladorObras {
     ObraPoetica* obra = arbolObra.getNodeKey(IDOBRA)->data;
     obra->ediciones.insertarFinal(edicion);
     listaPorIDEditorial.insertarClave(obra, edicion.IDEDITORIAL);
-    // Si quieres clasificar por año, extrae el año de edicion.fechaDePublicacion (formato "dd/mm/aaaa")
+    // Si quieres clasificar por año, extrae el año de
+    // edicion.fechaDePublicacion (formato "dd/mm/aaaa")
     if (edicion.fechaDePublicacion.size() >= 10) {
       int anio = std::stoi(edicion.fechaDePublicacion.substr(6, 4));
       listaPorAnioPublicacion.insertarClave(obra, anio);
@@ -79,7 +83,8 @@ class ControladorObras {
         unsigned int idEditorial = obra->ediciones.get(i).IDEDITORIAL;
         listaPorIDEditorial.borrarClave(idEditorial, obra);
         if (obra->ediciones.get(i).fechaDePublicacion.size() >= 10) {
-          int anio = std::stoi(obra->ediciones.get(i).fechaDePublicacion.substr(6, 4));
+          int anio =
+              std::stoi(obra->ediciones.get(i).fechaDePublicacion.substr(6, 4));
           listaPorAnioPublicacion.borrarClave(anio, obra);
         }
         obra->ediciones.borrarPos(i);

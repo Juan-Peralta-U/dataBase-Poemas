@@ -1,6 +1,8 @@
 #include "VistaControlador.h"
 
 #include <cstdlib>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -21,11 +23,55 @@ void mostrarMenu(const string& titulo, const string opciones[],
 void ejecutarAccion(int menu, int opcion) {
   switch (menu) {
     case 1:  // Obras
+             /*
+             Datos de la obra poética.
+                 • Nombre del documento
+                 • Tipo de poesía: décima, soneto, himno, haiku, romance, octava real,
+             lira,        verso libre.
+           • ID del autor.
+           • Listado de las ediciones
+           • ID de la Editorial.
+           • Número de la edición
+           • Fecha de publicación.
+           • Ciudad de publicación.
+             */
+
       switch (opcion) {
-        case 1:
+        case 1: {
+          string nombreObra;
+          string ciudadPublicacion;
+          int tipoPoesia;
+          int IDautor;
+          int IDeditorial;
+          int fechaPublicacion[3];
+
+          cout << "Ingrese los siguiente datos.\n"
+                  "Nombre obra: ";
+          cin >> nombreObra;
+          cout << "0: Decima\n1: Soneto\n2: Himno\n3: Haiku\n4: Romance\n5: "
+                  "OctavaReal\n"
+                  "6: Lira\n7: VersoLibre\n"
+               << "Tipo de poesia: ";
+          cin >> tipoPoesia;
+          cout << "TODO: Aqui deberia salir una listado de autores\nIngrese el "
+                  "indice del autor";
+          cin.get();
+          // TODO: obtener IDAUTOR de una busqueda
+          cout << "Ingrese datos de la primera EDICION\n";
+          cout << "TODO: Aqui deberia salir una listado de "
+                  "editoriales\nIngrese el "
+                  "indice de la editorial";
+          cin.get();
+          // TODO: buscar IDeditorial de una busqueda
+          cout << "Ingrese dia: ";
+          cin >> fechaPublicacion[0];
+          cout << "Ingrese mes: ";
+          cin >> fechaPublicacion[1];
+          cout << "Ingrese año: ";
+          cin >> fechaPublicacion[2];
           cout << "Agregar una nueva obra." << endl;
-          // logica para agregar una obra
           break;
+        }
         case 2:
           cout << "Consultar obras existentes." << endl;
           // logica para consultar obras
