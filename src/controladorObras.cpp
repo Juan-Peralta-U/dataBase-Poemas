@@ -134,4 +134,38 @@ class ControladorObras {
       }
     }
   }
+
+  void mostrarObrasPorAutor(unsigned int IDAUTOR) {
+    cout << "\n--- LISTA DE OBRAS POR AÑO ---\n";
+
+    nodoOrd<ObraPoetica*, int>* auxAnio = listaPorAnioPublicacion.buscarPos(0);
+
+    while (NULL != auxAnio) {
+      ObraPoetica* obra = auxAnio->dato1;
+
+      auxAnio = auxAnio->sig;
+
+      if (obra->IDAUTOR != IDAUTOR) continue;
+
+      cout << "Autor: " << obra->IDAUTOR << " | Nombre: " << obra->nombre
+           << " | Tipo: " << obra->obra << " | Año: "
+           << obra->ediciones.buscarPos(0)->dato1.fechaDePublicacion << endl;
+    }
+
+    nodoOrd<ObraPoetica*, unsigned int>* auxEdi =
+        listaPorIDEditorial.buscarPos(0);
+
+    cout << "\n--- LISTA DE OBRAS Editorial ---\n";
+    while (NULL != auxEdi) {
+      ObraPoetica* obra = auxEdi->dato1;
+
+      auxEdi = auxEdi->sig;
+
+      if (obra->IDAUTOR != IDAUTOR) continue;
+
+      cout << "Autor: " << obra->IDAUTOR << " | Nombre: " << obra->nombre
+           << " | Tipo: " << obra->obra << " | Editorial: "
+           << obra->ediciones.buscarPos(0)->dato1.IDEDITORIAL << endl;
+    }
+  }
 };
