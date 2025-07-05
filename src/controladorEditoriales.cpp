@@ -1,22 +1,25 @@
-#pragma once
+#include <string>
+
 #include "listaOrd.h"
 #include "m_Editorial.h"
 #include "treeRB.h"
-#include <string>
 
 class ControladorEditoriales {
  private:
   // Listas auxiliares para consultas eficientes
-  ListaOrd<datosEditorial*, char> listaPorNombreEditorial;   // Para búsquedas por nombre
-  ListaOrd<datosEditorial*, char> listaPorCiudad;            // Para búsquedas por ciudad
-  ListaOrd<datosEditorial*, char> listaPorPais;              // Para búsquedas por país
-  ListaOrd<datosEditorial*, int> listaPorNumPoetas;          // Para consultas por cantidad de poetas publicados
-  TreeRB<100, datosEditorial*> arbolEditorial;               // Clave = IDEDITORIAL
+  ListaOrd<datosEditorial*, char>
+      listaPorNombreEditorial;                     // Para búsquedas por nombre
+  ListaOrd<datosEditorial*, char> listaPorCiudad;  // Para búsquedas por ciudad
+  ListaOrd<datosEditorial*, char> listaPorPais;    // Para búsquedas por país
+  ListaOrd<datosEditorial*, int>
+      listaPorNumPoetas;  // Para consultas por cantidad de poetas publicados
+  TreeRB<100, datosEditorial*> arbolEditorial;  // Clave = IDEDITORIAL
 
  public:
   // Agregar una editorial
   void agregarEditorial(datosEditorial* editorial, int numPoetas = 0) {
-    listaPorNombreEditorial.insertarClave(editorial, editorial->nombreEditorial[0]);
+    listaPorNombreEditorial.insertarClave(editorial,
+                                          editorial->nombreEditorial[0]);
     listaPorCiudad.insertarClave(editorial, editorial->ciudadOficina[0]);
     listaPorPais.insertarClave(editorial, editorial->paisOficina[0]);
     listaPorNumPoetas.insertarClave(editorial, numPoetas);
@@ -36,7 +39,8 @@ class ControladorEditoriales {
 
   // Modificar datos de una editorial
   void modificarEditorial(unsigned int IDEDITORIAL, std::string nuevoNombre,
-                          std::string nuevaCiudad, std::string nuevoPais, int numPoetas = 0) {
+                          std::string nuevaCiudad, std::string nuevoPais,
+                          int numPoetas = 0) {
     datosEditorial* aux = arbolEditorial.getNodeKey(IDEDITORIAL)->data;
     // Actualiza listas si cambian claves
     if (aux->nombreEditorial != nuevoNombre) {
@@ -69,12 +73,11 @@ class ControladorEditoriales {
     std::cout << "\n--- LISTA DE EDITORIALES ---\n";
     pila<datosEditorial*> editoriales = arbolEditorial.inorden();
     while (!editoriales.PilaVacia()) {
-        datosEditorial* ed = editoriales.Pop();
-        std::cout << "ID: " << ed->IDEDITORIAL
-                  << " | Nombre: " << ed->nombreEditorial
-                  << " | Ciudad: " << ed->ciudadOficina
-                  << " | Pais: " << ed->paisOficina
-                  << std::endl;
+      datosEditorial* ed = editoriales.Pop();
+      std::cout << "ID: " << ed->IDEDITORIAL
+                << " | Nombre: " << ed->nombreEditorial
+                << " | Ciudad: " << ed->ciudadOficina
+                << " | Pais: " << ed->paisOficina << std::endl;
     }
   }
 };

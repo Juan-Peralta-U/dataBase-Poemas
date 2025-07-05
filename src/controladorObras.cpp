@@ -1,28 +1,34 @@
-#pragma once
-#include "listaOrd.h"
-#include "m_obrapoetica.h"
-#include "m_edicion.h"
-#include "treeRB.h"
 #include <string>
-#include "pila.h" // Asegúrate de incluir la definición de pila
+
+#include "listaOrd.h"
+#include "m_edicion.h"
+#include "m_obrapoetica.h"
+#include "pila.h"  // Asegúrate de incluir la definición de pila
+#include "treeRB.h"
 
 class ControladorObras {
  private:
   // Listas auxiliares para consultas eficientes
-  ListaOrd<ObraPoetica*, int> listaPorAnioPublicacion;           // Para consultas por año
-  ListaOrd<ObraPoetica*, tipoObra> listaPorTipoPoesia;           // Para consultas por tipo de poesía
-  ListaOrd<ObraPoetica*, unsigned int> listaPorIDAutor;          // Para consultas por autor
-  ListaOrd<ObraPoetica*, unsigned int> listaPorIDEditorial;      // Para consultas por editorial
-  TreeRB<100, ObraPoetica*> arbolObra;                           // Búsqueda rápida por IDOBRA
+  ListaOrd<ObraPoetica*, int>
+      listaPorAnioPublicacion;  // Para consultas por año
+  ListaOrd<ObraPoetica*, tipoObra>
+      listaPorTipoPoesia;  // Para consultas por tipo de poesía
+  ListaOrd<ObraPoetica*, unsigned int>
+      listaPorIDAutor;  // Para consultas por autor
+  ListaOrd<ObraPoetica*, unsigned int>
+      listaPorIDEditorial;              // Para consultas por editorial
+  TreeRB<100, ObraPoetica*> arbolObra;  // Búsqueda rápida por IDOBRA
 
  public:
   // Agregar una obra (sin ediciones)
-  void agregarObra(unsigned int IDOBRA, unsigned int IDAUTOR, tipoObra obraTipo, const std::string& nombre) {
+  void agregarObra(unsigned int IDOBRA, unsigned int IDAUTOR, tipoObra obraTipo,
+                   const std::string& nombre) {
     ObraPoetica* nueva = new ObraPoetica{IDAUTOR, obraTipo, nombre};
     listaPorTipoPoesia.insertarClave(nueva, obraTipo);
     listaPorIDAutor.insertarClave(nueva, IDAUTOR);
     arbolObra.add(IDOBRA, nueva);
-    // No se agrega a listaPorAnioPublicacion ni listaPorIDEditorial hasta que tenga ediciones
+    // No se agrega a listaPorAnioPublicacion ni listaPorIDEditorial hasta que
+    // tenga ediciones
   }
 
   // Eliminar una obra y actualizar todas las listas
@@ -45,7 +51,8 @@ class ControladorObras {
   }
 
   // Modificar datos básicos de una obra (no ediciones)
-  void modificarObra(unsigned int IDOBRA, unsigned int nuevoIDAUTOR, tipoObra nuevoTipo, const std::string& nuevoNombre) {
+  void modificarObra(unsigned int IDOBRA, unsigned int nuevoIDAUTOR,
+                     tipoObra nuevoTipo, const std::string& nuevoNombre) {
     ObraPoetica* aux = arbolObra.getNodeKey(IDOBRA)->data;
     if (aux->obra != nuevoTipo) {
       listaPorTipoPoesia.borrarClave(aux->obra, aux);
@@ -86,7 +93,8 @@ class ControladorObras {
         unsigned int idEditorial = obra->ediciones.get(i).IDEDITORIAL;
         listaPorIDEditorial.borrarClave(idEditorial, obra);
         if (obra->ediciones.get(i).fechaDePublicacion.size() >= 10) {
-          int anio = std::stoi(obra->ediciones.get(i).fechaDePublicacion.substr(6, 4));
+          int anio =
+              std::stoi(obra->ediciones.get(i).fechaDePublicacion.substr(6, 4));
           listaPorAnioPublicacion.borrarClave(anio, obra);
         }
         obra->ediciones.borrarPos(i);
@@ -94,20 +102,18 @@ class ControladorObras {
       }
     }
   }
-  
 
-  // Puedes agregar aquí métodos para consultas avanzadas usando las listas auxiliares
+  // Puedes agregar aquí métodos para consultas avanzadas usando las listas
+  // auxiliares
 
   // Mostrar todas las obras guardadas
   void mostrarObras() {
     cout << "\n--- LISTA DE OBRAS ---\n";
     pila<ObraPoetica*> obras = arbolObra.inorden();
     while (!obras.PilaVacia()) {
-        ObraPoetica* obra = obras.Pop();
-        cout << "Autor: " << obra->IDAUTOR
-             << " | Nombre: " << obra->nombre
-             << " | Tipo: " << obra->obra
-             << endl;
+      ObraPoetica* obra = obras.Pop();
+      cout << "Autor: " << obra->IDAUTOR << " | Nombre: " << obra->nombre
+           << " | Tipo: " << obra->obra << endl;
     }
   }
 
@@ -116,19 +122,16 @@ class ControladorObras {
     cout << "\n--- TODAS LAS EDICIONES ---\n";
     pila<ObraPoetica*> obras = arbolObra.inorden();
     while (!obras.PilaVacia()) {
-        ObraPoetica* obra = obras.Pop();
-        cout << "Obra: " << obra->nombre << " (Autor: " << obra->IDAUTOR << ")\n";
-        int tam = obra->ediciones.getTam();
-        for (int i = 0; i < tam; ++i) {
-            const datosEdiccion& ed = obra->ediciones.get(i);
-            cout << "  Edicion #" << ed.numeroEdicion
-                 << ", Editorial: " << ed.IDEDITORIAL
-                 << ", Fecha: " << ed.fechaDePublicacion
-                 << ", Ciudad: " << ed.ciudadDePublicacion << endl;
-        }
+      ObraPoetica* obra = obras.Pop();
+      cout << "Obra: " << obra->nombre << " (Autor: " << obra->IDAUTOR << ")\n";
+      int tam = obra->ediciones.getTam();
+      for (int i = 0; i < tam; ++i) {
+        const datosEdiccion& ed = obra->ediciones.get(i);
+        cout << "  Edicion #" << ed.numeroEdicion
+             << ", Editorial: " << ed.IDEDITORIAL
+             << ", Fecha: " << ed.fechaDePublicacion
+             << ", Ciudad: " << ed.ciudadDePublicacion << endl;
+      }
     }
   }
-
-  
-  
 };

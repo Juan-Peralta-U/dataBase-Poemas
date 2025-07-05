@@ -1,5 +1,5 @@
-#pragma once
 #include <string>
+
 #include "listaOrd.h"
 #include "m_datosAutor.h"
 #include "treeRB.h"
@@ -7,15 +7,22 @@
 class ControladorAutores {
  private:
   // Listas auxiliares para consultas eficientes
-  ListaOrd<datosAutor*, char> listaPorCiudadResidencia;    // Para consultas por ciudad de residencia
-  ListaOrd<datosAutor*, char> listaPorCiudadNacimiento;    // Para consultas por ciudad de nacimiento
-  ListaOrd<datosAutor*, char> listaPorPaisNacimiento;      // Para consultas por país de nacimiento
-  ListaOrd<datosAutor*, int> listaPorAñoInicio;            // Para consultas por año de inicio en la literatura
-  ListaOrd<datosAutor*, int> listaPorAñoPublicacion;       // Para consultas por año de publicación de la primera obra
-  ListaOrd<datosAutor*, formacion> listaPorFormacion;      // Para consultas por formación
-  ListaOrd<datosAutor*, bool> listaPorSexo;                // Para consultas por género
+  ListaOrd<datosAutor*, char>
+      listaPorCiudadResidencia;  // Para consultas por ciudad de residencia
+  ListaOrd<datosAutor*, char>
+      listaPorCiudadNacimiento;  // Para consultas por ciudad de nacimiento
+  ListaOrd<datosAutor*, char>
+      listaPorPaisNacimiento;  // Para consultas por país de nacimiento
+  ListaOrd<datosAutor*, int>
+      listaPorAñoInicio;  // Para consultas por año de inicio en la literatura
+  ListaOrd<datosAutor*, int>
+      listaPorAñoPublicacion;  // Para consultas por año de publicación de la
+                               // primera obra
+  ListaOrd<datosAutor*, Formacion>
+      listaPorFormacion;                     // Para consultas por formación
+  ListaOrd<datosAutor*, bool> listaPorSexo;  // Para consultas por género
   // Puedes agregar más listas si necesitas consultas por edad, etc.
-  TreeRB<100, datosAutor*> arbolAutor;                     // Clave = IDAUTOR
+  TreeRB<100, datosAutor*> arbolAutor;  // Clave = IDAUTOR
 
  public:
   // Agregar un autor
@@ -47,7 +54,7 @@ class ControladorAutores {
   // Modificar datos de un autor
   void modificarAutor(unsigned int IDAUTOR, bool sexo, int añoInicio,
                       int añoPublicacion, int fechaNacimiento[3],
-                      formacion nuevaFormacion, std::string nombre,
+                      Formacion nuevaFormacion, std::string nombre,
                       std::string Apellido, std::string ciudadResidencia,
                       std::string paisNacimiento,
                       std::string cidudadNacimiento) {
@@ -104,13 +111,12 @@ class ControladorAutores {
     std::cout << "\n--- LISTA DE AUTORES ---\n";
     pila<datosAutor*> autores = arbolAutor.inorden();
     while (!autores.PilaVacia()) {
-        datosAutor* autor = autores.Pop();
-        std::cout << "ID: " << autor->IDAUTOR
-                  << " | Nombre: " << autor->nombre
-                  << " " << autor->Apellido
-                  << " | Sexo: " << (autor->sexo ? "M" : "F")
-                  << " | Ciudad residencia: " << autor->ciudadResidencia
-                  << std::endl;
+      datosAutor* autor = autores.Pop();
+      std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
+                << " " << autor->Apellido
+                << " | Sexo: " << (autor->sexo ? "M" : "F")
+                << " | Ciudad residencia: " << autor->ciudadResidencia
+                << std::endl;
     }
   }
 };
