@@ -63,6 +63,7 @@ class TreeRB {
   pila<s> postorden();
   pila<s> niveles();
   pila<int> nivelesKeys();
+  pila<int> inordenKeys();  // <-- Nueva función miembro
 
   bool add(int clave, s info);
   bool deleteKey(int clave);
@@ -504,6 +505,26 @@ pila<int> TreeRB<n, s>::nivelesKeys() {
   }
 
   return keyResult;
+}
+
+template <int n, typename s>
+pila<int> TreeRB<n, s>::inordenKeys() {
+    pila<int> resultado;
+    Stack<RBNode<s> *> stack;
+    RBNode<s> *current = datos[0].izq;
+
+    while (current != datos || !stack.isEmpty()) {
+        while (current != datos) {
+            stack.push(current);
+            current = current->izq;
+        }
+        if (!stack.isEmpty()) {
+            current = stack.pop();
+            resultado.Push(current->key);
+            current = current->der;
+        }
+    }
+    return resultado;
 }
 
 #endif

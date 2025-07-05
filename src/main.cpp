@@ -7,6 +7,7 @@
 #include "m_Editorial.h"
 #include "m_obrapoetica.h"
 #include "m_edicion.h"
+#include "gestorArchivos.cpp"
 
 using namespace std;
 
@@ -34,6 +35,12 @@ void crudAutores() {
         if(op == 1) {
             datosAutor* a = new datosAutor;
             leerUInt("ID: ", a->IDAUTOR);
+            // Verificar si ya existe un autor con ese ID
+            if (ctrlAutores.buscarAutor(a->IDAUTOR) != nullptr) {
+                cout << "ERROR: Ya existe un autor con ese ID. No se puede agregar.\n";
+                delete a;
+                continue;
+            }
             leerString("Nombre: ", a->nombre);
             leerString("Apellido: ", a->Apellido);
             leerInt("Sexo (0=F, 1=M): ", (int&)a->sexo);
@@ -79,6 +86,11 @@ void crudEditoriales() {
         if(op == 1) {
             datosEditorial* e = new datosEditorial;
             leerUInt("ID: ", e->IDEDITORIAL);
+            if (ctrlEditoriales.buscarEditorial(e->IDEDITORIAL) != nullptr) {
+                cout << "ERROR: Ya existe una editorial con ese ID. No se puede agregar.\n";
+                delete e;
+                continue;
+            }
             leerString("Nombre: ", e->nombreEditorial);
             leerString("Ciudad oficina: ", e->ciudadOficina);
             leerString("Pais oficina: ", e->paisOficina);
@@ -109,6 +121,11 @@ void crudObras() {
         if(op == 1) {
             unsigned int idObra, idAutor; string nombre; int tipo;
             leerUInt("ID Obra: ", idObra);
+            // Verificar si ya existe una obra con ese ID
+            if (ctrlObras.buscarObra(idObra) != nullptr) {
+                cout << "ERROR: Ya existe una obra con ese ID. No se puede agregar.\n";
+                continue;
+            }
             leerUInt("ID Autor: ", idAutor);
             // Verificar si el autor existe antes de agregar la obra
             if (ctrlAutores.buscarAutor(idAutor) == nullptr) {
@@ -135,6 +152,10 @@ void crudObras() {
             unsigned int idObra, idEditorial, numEdicion;
             string fecha, ciudad;
             leerUInt("ID Obra: ", idObra);
+            if(ctrlObras.buscarObra(idObra) == nullptr) {
+                cout << "ERROR: La obra con ese ID no existe. No se puede agregar la edición.\n";
+                continue;
+            }
             leerUInt("ID Editorial: ", idEditorial);
             // Verificar si la editorial existe antes de agregar la edición
             if (ctrlEditoriales.buscarEditorial(idEditorial) == nullptr) {
@@ -176,6 +197,11 @@ void menuMostrar() {
 }
 
 int main() {
+    cargarAutores(ctrlAutores, "autores.txt");
+    cargarEditoriales(ctrlEditoriales, "editoriales.txt");
+    cargarObras(ctrlObras, ctrlAutores, "obras.txt");
+    cargarEdiciones(ctrlObras, "ediciones.txt");
+
     int op;
     do {
         cout << "\n==== MENU PRINCIPAL ====\n";
@@ -190,5 +216,11 @@ int main() {
             default: cout << "Opcion invalida.\n";
         }
     } while(op != 5);
+
+    guardarAutores(ctrlAutores, "autores.txt");
+    guardarEditoriales(ctrlEditoriales, "editoriales.txt");
+    guardarObras(ctrlObras, "obras.txt");
+    guardarEdiciones(ctrlObras, "ediciones.txt");
+    
     return 0;
 }

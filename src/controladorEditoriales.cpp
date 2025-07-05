@@ -11,7 +11,7 @@ class ControladorEditoriales {
   ListaOrd<datosEditorial*, char> listaPorCiudad;            // Para búsquedas por ciudad
   ListaOrd<datosEditorial*, char> listaPorPais;              // Para búsquedas por país
   ListaOrd<datosEditorial*, int> listaPorNumPoetas;          // Para consultas por cantidad de poetas publicados
-  TreeRB<100, datosEditorial*> arbolEditorial;               // Clave = IDEDITORIAL
+  TreeRB<1000, datosEditorial*> arbolEditorial;               // Clave = IDEDITORIAL
 
  public:
   // Agregar una editorial
@@ -76,5 +76,9 @@ class ControladorEditoriales {
                   << " | Pais: " << ed->paisOficina
                   << std::endl;
     }
+  }
+
+  pila<datosEditorial*> getEditoriales(){
+    return arbolEditorial.inorden();
   }
 };
