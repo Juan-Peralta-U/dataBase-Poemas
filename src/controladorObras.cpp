@@ -1,16 +1,19 @@
+#pragma once
 #include "listaOrd.h"
 #include "m_obrapoetica.h"
 #include "m_edicion.h"
 #include "treeRB.h"
 #include <string>
+#include "pila.h" // Asegúrate de incluir la definición de pila
 
 class ControladorObras {
  private:
-  ListaOrd<ObraPoetica*, int> listaPorAnioPublicacion;
-  ListaOrd<ObraPoetica*, tipoObra> listaPorTipoPoesia;
-  ListaOrd<ObraPoetica*, unsigned int> listaPorIDAutor;
-  ListaOrd<ObraPoetica*, unsigned int> listaPorIDEditorial;
-  TreeRB<100, ObraPoetica*> arbolObra;  // Clave = IDOBRA
+  // Listas auxiliares para consultas eficientes
+  ListaOrd<ObraPoetica*, int> listaPorAnioPublicacion;           // Para consultas por año
+  ListaOrd<ObraPoetica*, tipoObra> listaPorTipoPoesia;           // Para consultas por tipo de poesía
+  ListaOrd<ObraPoetica*, unsigned int> listaPorIDAutor;          // Para consultas por autor
+  ListaOrd<ObraPoetica*, unsigned int> listaPorIDEditorial;      // Para consultas por editorial
+  TreeRB<100, ObraPoetica*> arbolObra;                           // Búsqueda rápida por IDOBRA
 
  public:
   // Agregar una obra (sin ediciones)
@@ -22,6 +25,7 @@ class ControladorObras {
     // No se agrega a listaPorAnioPublicacion ni listaPorIDEditorial hasta que tenga ediciones
   }
 
+  // Eliminar una obra y actualizar todas las listas
   void eliminarObra(unsigned int IDOBRA) {
     ObraPoetica* del = arbolObra.getNodeKey(IDOBRA)->data;
     listaPorTipoPoesia.borrarClave(del->obra, del);
@@ -40,6 +44,7 @@ class ControladorObras {
     delete del;
   }
 
+  // Modificar datos básicos de una obra (no ediciones)
   void modificarObra(unsigned int IDOBRA, unsigned int nuevoIDAUTOR, tipoObra nuevoTipo, const std::string& nuevoNombre) {
     ObraPoetica* aux = arbolObra.getNodeKey(IDOBRA)->data;
     if (aux->obra != nuevoTipo) {
@@ -60,17 +65,19 @@ class ControladorObras {
     return arbolObra.getNodeKey(IDOBRA)->data;
   }
 
+  // Agregar una edición a una obra y actualizar listas auxiliares
   void agregarEdicionAObra(unsigned int IDOBRA, const datosEdiccion& edicion) {
     ObraPoetica* obra = arbolObra.getNodeKey(IDOBRA)->data;
     obra->ediciones.insertarFinal(edicion);
     listaPorIDEditorial.insertarClave(obra, edicion.IDEDITORIAL);
-    // Si quieres clasificar por año, extrae el año de edicion.fechaDePublicacion (formato "dd/mm/aaaa")
+    // Extraer año de la fecha (formato "dd/mm/aaaa")
     if (edicion.fechaDePublicacion.size() >= 10) {
       int anio = std::stoi(edicion.fechaDePublicacion.substr(6, 4));
       listaPorAnioPublicacion.insertarClave(obra, anio);
     }
   }
 
+  // Eliminar una edición de una obra y actualizar listas auxiliares
   void eliminarEdicionDeObra(unsigned int IDOBRA, unsigned int numEdicion) {
     ObraPoetica* obra = arbolObra.getNodeKey(IDOBRA)->data;
     int tam = obra->ediciones.getTam();
@@ -87,4 +94,41 @@ class ControladorObras {
       }
     }
   }
+  
+
+  // Puedes agregar aquí métodos para consultas avanzadas usando las listas auxiliares
+
+  // Mostrar todas las obras guardadas
+  void mostrarObras() {
+    cout << "\n--- LISTA DE OBRAS ---\n";
+    pila<ObraPoetica*> obras = arbolObra.inorden();
+    while (!obras.PilaVacia()) {
+        ObraPoetica* obra = obras.Pop();
+        cout << "Autor: " << obra->IDAUTOR
+             << " | Nombre: " << obra->nombre
+             << " | Tipo: " << obra->obra
+             << endl;
+    }
+  }
+
+  // Mostrar todas las ediciones de todas las obras
+  void mostrarTodasEdiciones() {
+    cout << "\n--- TODAS LAS EDICIONES ---\n";
+    pila<ObraPoetica*> obras = arbolObra.inorden();
+    while (!obras.PilaVacia()) {
+        ObraPoetica* obra = obras.Pop();
+        cout << "Obra: " << obra->nombre << " (Autor: " << obra->IDAUTOR << ")\n";
+        int tam = obra->ediciones.getTam();
+        for (int i = 0; i < tam; ++i) {
+            const datosEdiccion& ed = obra->ediciones.get(i);
+            cout << "  Edicion #" << ed.numeroEdicion
+                 << ", Editorial: " << ed.IDEDITORIAL
+                 << ", Fecha: " << ed.fechaDePublicacion
+                 << ", Ciudad: " << ed.ciudadDePublicacion << endl;
+        }
+    }
+  }
+
+  
+  
 };
