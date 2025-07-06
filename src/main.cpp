@@ -222,6 +222,8 @@ void mostrarconsultas() {
             ctrlEditoriales.autoresPublicadosPorEditorial(id));
         break;
       case 4:
+        leerUInt("Catidad de Autores: ", id);
+        ctrlEditoriales.mostarNumeroDeAutores(id);
         break;
       case 5:
         break;

@@ -60,6 +60,7 @@ class ControladorEditoriales {
       aux->paisOficina = nuevoPais;
       listaPorPais.insertarClave(aux, aux->paisOficina[0]);
     }
+
     // Actualiza número de poetas publicados si es necesario
     listaPorNumPoetas.borrarClave(numPoetas, aux);
     listaPorNumPoetas.insertarClave(aux, numPoetas);
@@ -76,6 +77,24 @@ class ControladorEditoriales {
     pila<datosEditorial*> editoriales = arbolEditorial.inorden();
     while (!editoriales.PilaVacia()) {
       datosEditorial* ed = editoriales.Pop();
+      std::cout << "ID: " << ed->IDEDITORIAL
+                << " | Nombre: " << ed->nombreEditorial
+                << " | Ciudad: " << ed->ciudadOficina
+                << " | Pais: " << ed->paisOficina << std::endl;
+    }
+  }
+
+  void mostarNumeroDeAutores(int cantidad) {
+    std::cout << "\n--- LISTA DE EDITORIALES por cantidad publicado ---\n";
+    pila<datosEditorial*> editoriales = arbolEditorial.inorden();
+    while (!editoriales.PilaVacia()) {
+      datosEditorial* ed = editoriales.Pop();
+      if (autoresPublicados.getNodeKey(ed->IDEDITORIAL) == nullptr) continue;
+      if (autoresPublicados.getNodeKey(ed->IDEDITORIAL)->data->getTam() <
+          cantidad)
+
+        continue;
+
       std::cout << "ID: " << ed->IDEDITORIAL
                 << " | Nombre: " << ed->nombreEditorial
                 << " | Ciudad: " << ed->ciudadOficina
