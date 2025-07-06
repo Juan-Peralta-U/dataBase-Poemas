@@ -1,5 +1,0 @@
-1,Editorial Aurora,Bogotá,Colombia
-2,Ediciones Horizonte,Medellín,Colombia
-3,Letras del Caribe,Barranquilla,Colombia
-4,Poetas Andinos,Cali,Colombia
-5,Surcos Literarios,Cartagena,Colombia
