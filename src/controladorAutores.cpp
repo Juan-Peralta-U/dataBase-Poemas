@@ -157,4 +157,23 @@ class ControladorAutores {
                 << std::endl;
     }
   }
+
+  void mostrarAutoresPorCiudadResidencia(Lista<unsigned int>* IDAUTOR) {
+    cout << "\n--- LISTA DE AUTORES POR Ciudad de nacimiento ---\n";
+
+    nodoOrd<datosAutor*, char>* auxRes = listaPorCiudadNacimiento.buscarPos(0);
+
+    while (NULL != auxRes) {
+      datosAutor* autor = auxRes->dato1;
+      auxRes = auxRes->sig;
+
+      if (IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
+
+      std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
+                << " " << autor->Apellido
+                << " | Sexo: " << (autor->sexo ? "M" : "F")
+                << " | Ciudad residencia: " << autor->ciudadResidencia
+                << std::endl;
+    }
+  }
 };

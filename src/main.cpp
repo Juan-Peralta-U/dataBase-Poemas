@@ -225,9 +225,35 @@ void mostrarconsultas() {
         leerUInt("Catidad de Autores: ", id);
         ctrlEditoriales.mostarNumeroDeAutores(id);
         break;
-      case 5:
+      case 5: {
+        pila<datosEditorial*> editoriales = ctrlEditoriales.getEditoriales();
+        Lista<unsigned int>* autores;
+        while (!editoriales.PilaVacia()) {
+          datosEditorial* ed = editoriales.Pop();
+
+          int tamañoH, tamañoF;
+
+          autores = ctrlEditoriales.autoresPublicadosPorEditorial(id);
+
+          if (autores == nullptr) continue;
+
+          for (int i = 0; i < autores->getTam(); i++)
+            ctrlAutores.buscarAutor(autores->get(i))->sexo ? tamañoH++
+                                                           : tamañoF++;
+
+          std::cout << "ID: " << ed->IDEDITORIAL
+                    << " | Nombre: " << ed->nombreEditorial
+                    << " | Cantidad H: " << tamañoH
+                    << " | Cantidad F: " << tamañoF
+                    << " | Ciudad: " << ed->ciudadOficina
+                    << " | Pais: " << ed->paisOficina << std::endl;
+
+          ctrlAutores.mostrarAutoresPorCiudadResidencia(autores);
+        }
         break;
+      }
       case 6:
+
         break;
       case 7:
         break;

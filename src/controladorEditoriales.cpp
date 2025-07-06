@@ -90,13 +90,13 @@ class ControladorEditoriales {
     while (!editoriales.PilaVacia()) {
       datosEditorial* ed = editoriales.Pop();
       if (autoresPublicados.getNodeKey(ed->IDEDITORIAL) == nullptr) continue;
-      if (autoresPublicados.getNodeKey(ed->IDEDITORIAL)->data->getTam() <
-          cantidad)
-
-        continue;
+      int tamaño =
+          autoresPublicados.getNodeKey(ed->IDEDITORIAL)->data->getTam();
+      if (tamaño < cantidad) continue;
 
       std::cout << "ID: " << ed->IDEDITORIAL
                 << " | Nombre: " << ed->nombreEditorial
+                << " | Cantidad: " << tamaño
                 << " | Ciudad: " << ed->ciudadOficina
                 << " | Pais: " << ed->paisOficina << std::endl;
     }
@@ -112,4 +112,6 @@ class ControladorEditoriales {
   Lista<unsigned int>* autoresPublicadosPorEditorial(unsigned int IDEDITORIAL) {
     return autoresPublicados.getNodeKey(IDEDITORIAL)->data;
   }
+
+  pila<datosEditorial*> getEditoriales() { return arbolEditorial.inorden(); }
 };
