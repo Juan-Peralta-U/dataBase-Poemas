@@ -1,11 +1,20 @@
-#include <ctime>  // Para obtener la fecha actual del sistema
-#include <string>
+/*
+  ControladorAutores.h/.cpp
+  ---------------------------------
+  Esta clase gestiona el conjunto de autores literarios del sistema, incluyendo:
+  - Registro, edición y eliminación de autores.
+  - Búsquedas eficientes por atributos como ciudad, país, año o sexo.
+  - Estructuras en memoria: listas ordenadas y árbol rojo-negro.
+*/
 
+#include <ctime>  // Para obtener la fecha actual del sistema
+#include <string> // Para manipular cadenas de caracteres
+// Inclusión de estructuras de listas y árboles personalizadas
 #include "lista.h"
 #include "listaOrd.h"
 #include "m_datosAutor.h"
 #include "treeRB.h"
-
+// Clase que administra toda la información relacionada con los autores
 class ControladorAutores {
  private:
   // Listas auxiliares para consultas eficientes
@@ -23,12 +32,13 @@ class ControladorAutores {
   ListaOrd<datosAutor*, Formacion>
       listaPorFormacion;                     // Para consultas por formación
   ListaOrd<datosAutor*, bool> listaPorSexo;  // Para consultas por género
-  // Puedes agregar más listas si necesitas consultas por edad, etc.
-  TreeRB<1000, datosAutor*> arbolAutor;                     // Clave = IDAUTOR
+  // Árbol RojiNegro para búsquedas rápidas por IDAUTOR
+  TreeRB<1000, datosAutor*> arbolAutor;   // Clave = IDAUTOR
 
  public:
-  // Agregar un autor
+ // Agrega un autor nuevo y lo registra en todas las listas auxiliares y el árbol
   void agregarAutor(datosAutor* autor) {
+   // Insertar en cada lista usando la clave correspondiente
     listaPorCiudadResidencia.insertarClave(autor, autor->ciudadResidencia[0]);
     listaPorCiudadNacimiento.insertarClave(autor, autor->cidudadNacimiento[0]);
     listaPorPaisNacimiento.insertarClave(autor, autor->paisNacimiento[0]);
@@ -36,12 +46,15 @@ class ControladorAutores {
     listaPorAñoPublicacion.insertarClave(autor, autor->añoPublicacion);
     listaPorFormacion.insertarClave(autor, autor->formacion);
     listaPorSexo.insertarClave(autor, autor->sexo);
+    // Agregar al árbol por su ID
     arbolAutor.add(autor->IDAUTOR, autor);
   }
 
   // Eliminar un autor y actualizar todas las listas
   void eliminarAutor(unsigned int IDAUTOR) {
+   // Obtener el puntero al autor por su ID
     datosAutor* del = arbolAutor.getNodeKey(IDAUTOR)->data;
+   // Borrar el autor de todas las listas auxiliares
     listaPorCiudadResidencia.borrarClave(del->ciudadResidencia[0], del);
     listaPorCiudadNacimiento.borrarClave(del->cidudadNacimiento[0], del);
     listaPorPaisNacimiento.borrarClave(del->paisNacimiento[0], del);
@@ -49,12 +62,13 @@ class ControladorAutores {
     listaPorAñoPublicacion.borrarClave(del->añoPublicacion, del);
     listaPorFormacion.borrarClave(del->formacion, del);
     listaPorSexo.borrarClave(del->sexo, del);
+   // Eliminar del árbol
     arbolAutor.deleteKey(del->IDAUTOR);
+   // Liberar memoria del objeto autor
     delete del;
   }
-
-  // Modificar datos de un autor
-  void modificarAutor(unsigned int IDAUTOR, bool sexo, int añoInicio,
+ // Modifica los datos de un autor existente
+   void modificarAutor(unsigned int IDAUTOR, bool sexo, int añoInicio,
                       int añoPublicacion, int fechaNacimiento[3],
                       Formacion nuevaFormacion, std::string nombre,
                       std::string Apellido, std::string ciudadResidencia,
@@ -98,6 +112,7 @@ class ControladorAutores {
       aux->sexo = sexo;
       listaPorSexo.insertarClave(aux, aux->sexo);
     }
+       // Actualizar datos generales
     aux->nombre = nombre;
     aux->Apellido = Apellido;
     for (int i = 0; i < 3; ++i) aux->fechaNacimiento[i] = fechaNacimiento[i];
@@ -111,7 +126,8 @@ class ControladorAutores {
   // Mostrar todos los autores guardados
   void mostrarAutores() {
     std::cout << "\n--- LISTA DE AUTORES ---\n";
-    pila<datosAutor*> autores = arbolAutor.inorden();
+    pila<datosAutor*> autores = arbolAutor.inorden(); // Recorre en orden
+   
     while (!autores.PilaVacia()) {
         datosAutor* autor = autores.Pop();
         std::cout << "ID: " << autor->IDAUTOR
@@ -126,6 +142,7 @@ class ControladorAutores {
             << std::endl;
     }
   }
+// Retorna la pila de autores del árbol (para otros módulos)
   pila<datosAutor*> getAutores() {
     return arbolAutor.inorden();
       datosAutor* autor = autores.Pop();
@@ -136,7 +153,7 @@ class ControladorAutores {
                 << std::endl;
     }
   }
-
+// Muestra un autor específico
   void mostrarAutor(unsigned int IDAUTOR) {
     std::cout << "\n--- LISTA DE AUTORES ---\n";
     datosAutor* autor = arbolAutor.getNodeKey(IDAUTOR)->data;
@@ -146,7 +163,7 @@ class ControladorAutores {
               << " | Ciudad residencia: " << autor->ciudadResidencia
               << std::endl;
   }
-
+// Muestra autores de una lista, organizados por ciudad y año de inicio
   void mostrarAutoresEditorial(Lista<unsigned int>* IDAUTOR) {
     cout << "\n--- LISTA DE AUTORES POR RESIDENCIA ---\n";
 
@@ -183,7 +200,7 @@ class ControladorAutores {
                 << std::endl;
     }
   }
-
+// Muestra autores por rango de edad y formación
   void mostrarAutoresPorRangoyFormacion(int rangoEdad[2], Formacion formacion) {
     cout << "\n--- LISTA DE AUTORES POR Ciudad de nacimiento ---\n";
 
@@ -206,7 +223,7 @@ class ControladorAutores {
                 << std::endl;
     }
   }
-
+ // Muestra autores por ciudad de nacimiento
   void mostrarAutoresPorCiudadResidencia(Lista<unsigned int>* IDAUTOR) {
     cout << "\n--- LISTA DE AUTORES POR Ciudad de nacimiento ---\n";
 
@@ -225,7 +242,7 @@ class ControladorAutores {
                 << std::endl;
     }
   }
-
+  // Calcula la edad actual de un autor a partir de su fecha de nacimiento
   int calcularEdadActual(int IDAUTOR) {
     datosAutor* autor = arbolAutor.getNodeKey(IDAUTOR)->data;
 
