@@ -8,14 +8,12 @@
 class ControladorEditoriales {
  private:
   // Listas auxiliares para consultas eficientes
-  ListaOrd<datosEditorial*, char>
-      listaPorNombreEditorial;                     // Para búsquedas por nombre
-  ListaOrd<datosEditorial*, char> listaPorCiudad;  // Para búsquedas por ciudad
-  ListaOrd<datosEditorial*, char> listaPorPais;    // Para búsquedas por país
-  ListaOrd<datosEditorial*, int>
-      listaPorNumPoetas;  // Para consultas por cantidad de poetas publicados
-  TreeRB<100, datosEditorial*> arbolEditorial;          // Clave = IDEDITORIAL
-  TreeRB<100, Lista<unsigned int>*> autoresPublicados;  // Clave = IDEDITORIAL
+  ListaOrd<datosEditorial*, char> listaPorNombreEditorial;   // Para búsquedas por nombre
+  ListaOrd<datosEditorial*, char> listaPorCiudad;            // Para búsquedas por ciudad
+  ListaOrd<datosEditorial*, char> listaPorPais;              // Para búsquedas por país
+  ListaOrd<datosEditorial*, int> listaPorNumPoetas;          // Para consultas por cantidad de poetas publicados
+  TreeRB<1000, datosEditorial*> arbolEditorial;              // Clave = IDEDITORIAL
+  TreeRB<100, Lista<unsigned int>*> autoresPublicados;       // Clave = IDEDITORIAL
 
  public:
   // Agregar una editorial
@@ -102,6 +100,10 @@ class ControladorEditoriales {
     }
   }
 
+  pila<datosEditorial*> getEditoriales(){
+    return arbolEditorial.inorden();
+  }
+  
   void insertarAutorPublicado(unsigned int IDAUTOR, unsigned int IDEDITORIAL) {
     if (autoresPublicados.getNodeKey(IDEDITORIAL) == nullptr)
       autoresPublicados.add(IDEDITORIAL, new Lista<unsigned int>());

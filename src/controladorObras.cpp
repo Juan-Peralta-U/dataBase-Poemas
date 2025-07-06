@@ -9,15 +9,11 @@
 class ControladorObras {
  private:
   // Listas auxiliares para consultas eficientes
-  ListaOrd<ObraPoetica*, int>
-      listaPorAnioPublicacion;  // Para consultas por año
-  ListaOrd<ObraPoetica*, tipoObra>
-      listaPorTipoPoesia;  // Para consultas por tipo de poesía
-  ListaOrd<ObraPoetica*, unsigned int>
-      listaPorIDAutor;  // Para consultas por autor
-  ListaOrd<ObraPoetica*, unsigned int>
-      listaPorIDEditorial;              // Para consultas por editorial
-  TreeRB<100, ObraPoetica*> arbolObra;  // Búsqueda rápida por IDOBRA
+  ListaOrd<ObraPoetica*, int> listaPorAnioPublicacion;           // Para consultas por año
+  ListaOrd<ObraPoetica*, tipoObra> listaPorTipoPoesia;           // Para consultas por tipo de poesía
+  ListaOrd<ObraPoetica*, unsigned int> listaPorIDAutor;          // Para consultas por autor
+  ListaOrd<ObraPoetica*, unsigned int> listaPorIDEditorial;      // Para consultas por editorial
+  TreeRB<1000, ObraPoetica*> arbolObra;                           // Búsqueda rápida por IDOBRA
 
  public:
   // Agregar una obra (sin ediciones)
@@ -195,6 +191,27 @@ class ControladorObras {
     }
   }
 
+  pila<ObraPoetica*> getObras() {
+    return arbolObra.inorden();
+  }
+
+  pila<datosEdiccion> getEdiciones() {
+    pila<datosEdiccion> ediciones;
+    pila<ObraPoetica*> obras = arbolObra.inorden();
+    while (!obras.PilaVacia()) {
+        ObraPoetica* obra = obras.Pop();
+        int tam = obra->ediciones.getTam();
+        for (int i = 0; i < tam; ++i) {
+            ediciones.Push(obra->ediciones.get(i));
+        }
+    }
+    return ediciones;
+  }
+  
+  // Devuelve una pila con las claves (IDOBRA) en inorden
+  pila<int> getClavesObras() {
+    return arbolObra.inordenKeys();
+    
   void mostrarTiposObraPorAutorYTipo(unsigned int IDAUTOR, tipoObra tipo) {
     cout << "\n--- TODAS LAS EDICIONES ---\n";
     pila<ObraPoetica*> obras = arbolObra.inorden();

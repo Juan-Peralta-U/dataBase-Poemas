@@ -7,6 +7,7 @@
 #include "m_Editorial.h"
 #include "m_datosAutor.h"
 #include "m_edicion.h"
+#include "gestorArchivos.cpp"
 #include "m_obrapoetica.h"
 
 using namespace std;
@@ -87,6 +88,7 @@ void crudAutores() {
       cout << "Autor modificado.\n";
     }
   } while (op != 4);
+
 }
 
 // CRUD para editoriales
@@ -121,6 +123,7 @@ void crudEditoriales() {
       cout << "Editorial modificada.\n";
     }
   } while (op != 4);
+
 }
 
 // CRUD para obras y ediciones
@@ -316,32 +319,31 @@ void menuMostrar() {
 }
 
 int main() {
-  int op;
-  do {
-    cout << "\n==== MENU PRINCIPAL ====\n";
-    cout << "1. Obras\n2. Autores\n3. Editoriales\n4. Mostrar\n5. "
-            "Salir\nOpcion: ";
-    cin >> op;
-    cin.ignore();
-    switch (op) {
-      case 1:
-        crudObras();
-        break;
-      case 2:
-        crudAutores();
-        break;
-      case 3:
-        crudEditoriales();
-        break;
-      case 4:
-        menuMostrar();
-        break;
-      case 5:
-        cout << "Saliendo...\n";
-        break;
-      default:
-        cout << "Opcion invalida.\n";
-    }
-  } while (op != 5);
-  return 0;
+    cargarAutores(ctrlAutores, "autores.txt");
+    cargarEditoriales(ctrlEditoriales, "editoriales.txt");
+    cargarObras(ctrlObras, ctrlAutores, "obras.txt");
+    cargarEdiciones(ctrlObras, "ediciones.txt");
+
+    int op;
+    do {
+        cout << "\n==== MENU PRINCIPAL ====\n";
+        cout << "1. Obras\n2. Autores\n3. Editoriales\n4. Mostrar\n5. Salir\nOpcion: ";
+        cin >> op; cin.ignore();
+        switch(op) {
+            case 1: crudObras(); break;
+            case 2: crudAutores(); break;
+            case 3: crudEditoriales(); break;
+            case 4: menuMostrar(); break;
+            case 5: cout << "Saliendo...\n"; break;
+            default: cout << "Opcion invalida.\n";
+        }
+    } while(op != 5);
+
+    guardarAutores(ctrlAutores, "autores.txt");
+    guardarEditoriales(ctrlEditoriales, "editoriales.txt");
+    guardarObras(ctrlObras, "obras.txt");
+    guardarEdiciones(ctrlObras, "ediciones.txt");
+    
+    return 0;
+
 }

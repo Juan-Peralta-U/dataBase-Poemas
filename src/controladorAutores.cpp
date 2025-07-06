@@ -24,7 +24,7 @@ class ControladorAutores {
       listaPorFormacion;                     // Para consultas por formación
   ListaOrd<datosAutor*, bool> listaPorSexo;  // Para consultas por género
   // Puedes agregar más listas si necesitas consultas por edad, etc.
-  TreeRB<100, datosAutor*> arbolAutor;  // Clave = IDAUTOR
+  TreeRB<1000, datosAutor*> arbolAutor;                     // Clave = IDAUTOR
 
  public:
   // Agregar un autor
@@ -113,6 +113,21 @@ class ControladorAutores {
     std::cout << "\n--- LISTA DE AUTORES ---\n";
     pila<datosAutor*> autores = arbolAutor.inorden();
     while (!autores.PilaVacia()) {
+        datosAutor* autor = autores.Pop();
+        std::cout << "ID: " << autor->IDAUTOR
+            << " | Nombre: " << autor->nombre
+            << " " << autor->Apellido
+            << " | Sexo: " << (autor->sexo ? "M" : "F")
+            << " | Ciudad residencia: " << autor->ciudadResidencia
+            << " | Fecha de nacimiento: "
+            << autor->fechaNacimiento[0] << "/"
+            << autor->fechaNacimiento[1] << "/"
+            << autor->fechaNacimiento[2]
+            << std::endl;
+    }
+  }
+  pila<datosAutor*> getAutores() {
+    return arbolAutor.inorden();
       datosAutor* autor = autores.Pop();
       std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
                 << " " << autor->Apellido
