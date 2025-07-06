@@ -1,7 +1,8 @@
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
+#include <iostream> // Para entrada/salida estándar
+#include <string> // Para usar strings
+#include <fstream> // Para leer y escribir archivos
+#include <sstream> // Para separar los campos de cada línea
+// Inclusión de controladores y modelos
 #include "controladorObras.cpp"
 #include "controladorAutores.cpp"
 #include "controladorEditoriales.cpp"
@@ -12,23 +13,21 @@
 
 using namespace std;
 
-//CARGAR DATOS
-
-//Cargar autores
-//ID,nombre,apellido,sexo,fechaNac_d,fechaNac_m,fechaNac_a,ciudadNac,paisNac,ciudadRes,formacion,anioInicio,anioPublicacion
+// FUNCIONES PARA CARGAR DATOS
+// Cargar autores desde un archivo CSV.
+// Cada línea contiene: ID,nombre,apellido,sexo,día,mes,año,ciudadNac,paisNac,ciudadRes,formacion,añoInicio,añoPublicacion
 void cargarAutores(ControladorAutores& ctrlAutores, const string &nombreArchivo) {
     ifstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
         cout << "Error al abrir el archivo de autores.\n";
         return;
     }
-
     string linea;
-    while (getline(archivo, linea)) {
-        istringstream iss(linea);
-        datosAutor* autor = new datosAutor;
+    while (getline(archivo, linea)) { // Leer cada línea del archivo
+        istringstream iss(linea); // Crear flujo para dividir la línea
+        datosAutor* autor = new datosAutor; // Crear nuevo objeto autor
         string campo;
-
+// Leer y asignar cada campo al objeto autor
         getline(iss, campo, ',');
         autor->IDAUTOR = stoi(campo);
         getline(iss, autor->nombre, ',');
@@ -53,10 +52,11 @@ void cargarAutores(ControladorAutores& ctrlAutores, const string &nombreArchivo)
         autor->añoIncio = stoi(campo);
         getline(iss, campo, ',');
         autor->añoPublicacion = stoi(campo);
-
+        
+    // Agregar autor al controlador
         ctrlAutores.agregarAutor(autor);
     }
-    archivo.close();
+    archivo.close(); // Cerrar archivo
     cout << "Autores cargados correctamente.\n";
 }
 
@@ -75,7 +75,7 @@ void cargarObras(ControladorObras& ctrlObras, ControladorAutores& ctrlAutores, c
         unsigned int idObra, idAutor;
         string nombre, campo;
         int tipo;
-
+// Leer los campos de la obra
         getline(iss, campo, ',');
         idObra = stoi(campo);
         getline(iss, campo, ',');
@@ -83,6 +83,7 @@ void cargarObras(ControladorObras& ctrlObras, ControladorAutores& ctrlAutores, c
         getline(iss, campo, ',');
         tipo = stoi(campo);
         getline(iss, nombre, ',');
+                // Crear y agregar la obra al controlador
         ctrlObras.agregarObra(idObra, idAutor, static_cast<tipoObra>(tipo), nombre);
     }
     archivo.close();
@@ -102,13 +103,13 @@ void cargarEditoriales(ControladorEditoriales& ctrlEditoriales, const string &no
         istringstream iss(linea);
         datosEditorial* editorial = new datosEditorial;
         string campo;
-
+// Leer campos de la editorial
         getline(iss, campo, ',');
         editorial->IDEDITORIAL = stoi(campo);
         getline(iss, editorial->nombreEditorial, ',');
         getline(iss, editorial->ciudadOficina, ',');
         getline(iss, editorial->paisOficina, ',');
-
+// Agregar editorial al controlador
         ctrlEditoriales.agregarEditorial(editorial);
     }
     archivo.close();
@@ -129,7 +130,7 @@ void cargarEdiciones(ControladorObras& ctrlObras, const string &nombreArchivo) {
         istringstream iss(linea);
         unsigned int idObra, idEditorial, numEdicion;
         string fechaPublicacion, ciudadPublicacion, campo;
-
+// Leer campos de la edición
         getline(iss, campo, ',');
         idObra = stoi(campo);
         getline(iss, campo, ',');
@@ -138,7 +139,7 @@ void cargarEdiciones(ControladorObras& ctrlObras, const string &nombreArchivo) {
         numEdicion = stoi(campo);
         getline(iss, fechaPublicacion, ',');
         getline(iss, ciudadPublicacion, ',');
-
+        // Crear y agregar la edición a la obra correspondiente
         datosEdiccion ed{ idEditorial, numEdicion, fechaPublicacion, ciudadPublicacion };
         ctrlObras.agregarEdicionAObra(idObra, ed);
     }
@@ -146,7 +147,7 @@ void cargarEdiciones(ControladorObras& ctrlObras, const string &nombreArchivo) {
 
 
 //GUARDAR DATOS
-
+// Guardar todos los autores en un archivo
 void guardarAutores(ControladorAutores& ctrlAutores, const string &nombreArchivo) {
     ofstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
@@ -155,9 +156,9 @@ void guardarAutores(ControladorAutores& ctrlAutores, const string &nombreArchivo
     }
 
     // Recorrer autores en inorden
-    pila<datosAutor*> autores = ctrlAutores.getAutores(); // Debes tener este método en ControladorAutores
+    pila<datosAutor*> autores = ctrlAutores.getAutores(); // Obtener pila de autores
     while (!autores.PilaVacia()) {
-        datosAutor* a = autores.Pop();
+        datosAutor* a = autores.Pop(); // Extraer autor
         archivo << a->IDAUTOR << ","
                 << a->nombre << ","
                 << a->Apellido << ","
@@ -175,7 +176,7 @@ void guardarAutores(ControladorAutores& ctrlAutores, const string &nombreArchivo
     archivo.close();
     cout << "Autores guardados correctamente.\n";
 }
-
+// Guardar todas las editoriales en un archivo
 void guardarEditoriales(ControladorEditoriales& ctrlEditoriales, const string &nombreArchivo) {
     ofstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
@@ -184,7 +185,7 @@ void guardarEditoriales(ControladorEditoriales& ctrlEditoriales, const string &n
     }
 
     // Recorrer editoriales en inorden
-    pila<datosEditorial*> editoriales = ctrlEditoriales.getEditoriales(); 
+    pila<datosEditorial*> editoriales = ctrlEditoriales.getEditoriales();  // Obtener pila
     while (!editoriales.PilaVacia()) {
         datosEditorial* e = editoriales.Pop();
         archivo << e->IDEDITORIAL << ","
@@ -195,7 +196,7 @@ void guardarEditoriales(ControladorEditoriales& ctrlEditoriales, const string &n
     archivo.close();
     cout << "Editoriales guardadas correctamente.\n";
 }
-
+// Guardar todas las ediciones de todas las obras en un archivo
 void guardarEdiciones(ControladorObras& ctrlObras, const string &nombreArchivo) {
     ofstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
@@ -220,7 +221,7 @@ void guardarEdiciones(ControladorObras& ctrlObras, const string &nombreArchivo) 
     archivo.close();
     cout << "Ediciones guardadas correctamente.\n";
 }
-
+// Guardar todas las obras poéticas registradas
 void guardarObras(ControladorObras& ctrlObras, const string &nombreArchivo) {
     ofstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
@@ -229,16 +230,16 @@ void guardarObras(ControladorObras& ctrlObras, const string &nombreArchivo) {
     }
 
     // Recorrer obras en inorden
-    pila<ObraPoetica*> obras = ctrlObras.getObras();
-    pila<int> claves = ctrlObras.getClavesObras(); // Debes obtener las claves (IDOBRA) en el mismo orden
+    pila<ObraPoetica*> obras = ctrlObras.getObras(); // Obtener pila de obras
+    pila<int> claves = ctrlObras.getClavesObras(); // Obtener pila de IDOBRA
 
     while (!obras.PilaVacia() && !claves.PilaVacia()) {
         ObraPoetica* obra = obras.Pop();
         int idObra = claves.Pop();
         archivo << idObra << "," // ID de la obra (clave del árbol)
-                << obra->IDAUTOR << ","
-                << static_cast<int>(obra->obra) << ","
-                << obra->nombre << "\n";
+                << obra->IDAUTOR << "," // ID del autor
+                << static_cast<int>(obra->obra) << ","  // Tipo de obra
+                << obra->nombre << "\n"; // Nombre de la obra
     }
     archivo.close();
     cout << "Obras guardadas correctamente.\n";
