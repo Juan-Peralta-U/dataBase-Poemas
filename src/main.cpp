@@ -261,6 +261,18 @@ void mostrarconsultas() {
                                                      Formacion(formacion));
         break;
       case 7:
+        int tipo;
+        leerUInt("ID Editorial: ", id);
+        leerInt("Tipo poesia", tipo);
+        ctrlEditoriales.autoresPublicadosPorEditorial(id);
+        Lista<unsigned int>* autores;
+        unsigned int autoresId;
+
+        for (int i = 0; i < autores->getTam(); i++) {
+          autoresId = autores->get(i);
+          ctrlAutores.mostrarAutor(autoresId);
+          ctrlObras.mostrarTiposObraPorAutorYTipo(autoresId, tipoObra(tipo));
+        }
         break;
       case 8:
         break;

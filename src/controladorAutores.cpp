@@ -122,6 +122,16 @@ class ControladorAutores {
     }
   }
 
+  void mostrarAutor(unsigned int IDAUTOR) {
+    std::cout << "\n--- LISTA DE AUTORES ---\n";
+    datosAutor* autor = arbolAutor.getNodeKey(IDAUTOR)->data;
+    std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
+              << " " << autor->Apellido
+              << " | Sexo: " << (autor->sexo ? "M" : "F")
+              << " | Ciudad residencia: " << autor->ciudadResidencia
+              << std::endl;
+  }
+
   void mostrarAutoresEditorial(Lista<unsigned int>* IDAUTOR) {
     cout << "\n--- LISTA DE AUTORES POR RESIDENCIA ---\n";
 

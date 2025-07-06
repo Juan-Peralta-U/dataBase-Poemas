@@ -195,6 +195,26 @@ class ControladorObras {
     }
   }
 
+  void mostrarTiposObraPorAutorYTipo(unsigned int IDAUTOR, tipoObra tipo) {
+    cout << "\n--- TODAS LAS EDICIONES ---\n";
+    pila<ObraPoetica*> obras = arbolObra.inorden();
+    while (!obras.PilaVacia()) {
+      ObraPoetica* obra = obras.Pop();
+
+      if (obra->IDAUTOR != IDAUTOR) continue;
+      if (obra->obra != tipo) continue;
+
+      cout << "Obra: " << obra->nombre << " (Autor: " << obra->IDAUTOR << ")\n";
+      int tam = obra->ediciones.getTam();
+      for (int i = 0; i < tam; ++i) {
+        const datosEdiccion& ed = obra->ediciones.get(i);
+        cout << "  Edicion #" << ed.numeroEdicion
+             << ", Editorial: " << ed.IDEDITORIAL
+             << ", Fecha: " << ed.fechaDePublicacion
+             << ", Ciudad: " << ed.ciudadDePublicacion << endl;
+      }
+    }
+  }
   unsigned int mostarIDAUTOR(unsigned int IDOBRA) {
     return buscarObra(IDOBRA)->IDAUTOR;
   }
