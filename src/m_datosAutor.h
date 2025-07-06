@@ -17,14 +17,14 @@ Datos del autor.
 de publicación de su primera obra
 */
 
-enum formacion {
-  literatura,
-  artes,
-  cienciasSociales,
-  ingenierías,
-  áreasDeLaSalud,
-  jurisprudencia,
-  otros
+enum Formacion {
+  literatura = 0,
+  artes = 1,
+  cienciasSociales = 2,
+  ingenierías = 3,
+  áreasDeLaSalud = 4,
+  jurisprudencia = 5,
+  otros = 6
 };
 
 struct datosAutor {
@@ -33,7 +33,7 @@ struct datosAutor {
   int añoIncio, añoPublicacion;
   int fechaNacimiento[3];  // tres ints para dia/mes/año facilita calculos
                            // espero
-  formacion formacion;
+  Formacion formacion;
   std::string nombre, Apellido, cidudadNacimiento, paisNacimiento,
       ciudadResidencia;
 };

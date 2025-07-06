@@ -1,8 +1,9 @@
-#pragma once
+#include <string>
+
+#include "lista.h"
 #include "listaOrd.h"
 #include "m_Editorial.h"
 #include "treeRB.h"
-#include <string>
 
 class ControladorEditoriales {
  private:
@@ -11,12 +12,14 @@ class ControladorEditoriales {
   ListaOrd<datosEditorial*, char> listaPorCiudad;            // Para búsquedas por ciudad
   ListaOrd<datosEditorial*, char> listaPorPais;              // Para búsquedas por país
   ListaOrd<datosEditorial*, int> listaPorNumPoetas;          // Para consultas por cantidad de poetas publicados
-  TreeRB<1000, datosEditorial*> arbolEditorial;               // Clave = IDEDITORIAL
+  TreeRB<1000, datosEditorial*> arbolEditorial;              // Clave = IDEDITORIAL
+  TreeRB<100, Lista<unsigned int>*> autoresPublicados;       // Clave = IDEDITORIAL
 
  public:
   // Agregar una editorial
   void agregarEditorial(datosEditorial* editorial, int numPoetas = 0) {
-    listaPorNombreEditorial.insertarClave(editorial, editorial->nombreEditorial[0]);
+    listaPorNombreEditorial.insertarClave(editorial,
+                                          editorial->nombreEditorial[0]);
     listaPorCiudad.insertarClave(editorial, editorial->ciudadOficina[0]);
     listaPorPais.insertarClave(editorial, editorial->paisOficina[0]);
     listaPorNumPoetas.insertarClave(editorial, numPoetas);
@@ -36,7 +39,8 @@ class ControladorEditoriales {
 
   // Modificar datos de una editorial
   void modificarEditorial(unsigned int IDEDITORIAL, std::string nuevoNombre,
-                          std::string nuevaCiudad, std::string nuevoPais, int numPoetas = 0) {
+                          std::string nuevaCiudad, std::string nuevoPais,
+                          int numPoetas = 0) {
     datosEditorial* aux = arbolEditorial.getNodeKey(IDEDITORIAL)->data;
     // Actualiza listas si cambian claves
     if (aux->nombreEditorial != nuevoNombre) {
@@ -54,6 +58,7 @@ class ControladorEditoriales {
       aux->paisOficina = nuevoPais;
       listaPorPais.insertarClave(aux, aux->paisOficina[0]);
     }
+
     // Actualiza número de poetas publicados si es necesario
     listaPorNumPoetas.borrarClave(numPoetas, aux);
     listaPorNumPoetas.insertarClave(aux, numPoetas);
@@ -69,16 +74,46 @@ class ControladorEditoriales {
     std::cout << "\n--- LISTA DE EDITORIALES ---\n";
     pila<datosEditorial*> editoriales = arbolEditorial.inorden();
     while (!editoriales.PilaVacia()) {
-        datosEditorial* ed = editoriales.Pop();
-        std::cout << "ID: " << ed->IDEDITORIAL
-                  << " | Nombre: " << ed->nombreEditorial
-                  << " | Ciudad: " << ed->ciudadOficina
-                  << " | Pais: " << ed->paisOficina
-                  << std::endl;
+      datosEditorial* ed = editoriales.Pop();
+      std::cout << "ID: " << ed->IDEDITORIAL
+                << " | Nombre: " << ed->nombreEditorial
+                << " | Ciudad: " << ed->ciudadOficina
+                << " | Pais: " << ed->paisOficina << std::endl;
+    }
+  }
+
+  void mostarNumeroDeAutores(int cantidad) {
+    std::cout << "\n--- LISTA DE EDITORIALES por cantidad publicado ---\n";
+    pila<datosEditorial*> editoriales = arbolEditorial.inorden();
+    while (!editoriales.PilaVacia()) {
+      datosEditorial* ed = editoriales.Pop();
+      if (autoresPublicados.getNodeKey(ed->IDEDITORIAL) == nullptr) continue;
+      int tamaño =
+          autoresPublicados.getNodeKey(ed->IDEDITORIAL)->data->getTam();
+      if (tamaño < cantidad) continue;
+
+      std::cout << "ID: " << ed->IDEDITORIAL
+                << " | Nombre: " << ed->nombreEditorial
+                << " | Cantidad: " << tamaño
+                << " | Ciudad: " << ed->ciudadOficina
+                << " | Pais: " << ed->paisOficina << std::endl;
     }
   }
 
   pila<datosEditorial*> getEditoriales(){
     return arbolEditorial.inorden();
   }
+  
+  void insertarAutorPublicado(unsigned int IDAUTOR, unsigned int IDEDITORIAL) {
+    if (autoresPublicados.getNodeKey(IDEDITORIAL) == nullptr)
+      autoresPublicados.add(IDEDITORIAL, new Lista<unsigned int>());
+
+    autoresPublicados.getNodeKey(IDEDITORIAL)->data->insertarInicio(IDAUTOR);
+  }
+
+  Lista<unsigned int>* autoresPublicadosPorEditorial(unsigned int IDEDITORIAL) {
+    return autoresPublicados.getNodeKey(IDEDITORIAL)->data;
+  }
+
+  pila<datosEditorial*> getEditoriales() { return arbolEditorial.inorden(); }
 };

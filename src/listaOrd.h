@@ -1,3 +1,4 @@
+
 #ifndef LISTAORD_H
 #define LISTAORD_H
 
@@ -6,10 +7,12 @@ template <typename T, typename S>
 struct nodoOrd {
   T dato1;
   nodoOrd<T, S>* sig;
+
   S clave;
 };
 
 template <class T, typename S>
+
 class ListaOrd {
   int numElem;
   nodoOrd<T, S>* cab;
@@ -26,6 +29,7 @@ class ListaOrd {
 
   bool borrarClave(S clave, T reference);
   nodoOrd<T, S>* buscarClave(S clave);
+  nodoOrd<T, S>* buscarPos(int pos);
   bool modificarPos(T info1, int pos);
   void vaciarLista();
 
@@ -56,6 +60,7 @@ void ListaOrd<T, S>::insertarClave(T info1, S clave) {
 
   // Búsqueda del punto de inserción
   nodoOrd<T, S>* actual = cab;
+
   while (actual->sig != nullptr && actual->sig->clave <= clave) {
     actual = actual->sig;
   }
@@ -128,6 +133,21 @@ void ListaOrd<T, S>::vaciarLista() {
   }
   cab = nullptr;
   numElem = 0;
+}
+
+template <class T, typename S>
+nodoOrd<T, S>* ListaOrd<T, S>::buscarPos(int pos) {
+  if (pos < 0 || pos > numElem) {
+    std::cerr << "posicion fuera de rango\n";
+    return nullptr;
+  }
+
+  nodoOrd<T, S>* aux = cab;
+  for (int i = 0; i < pos; i++) {
+    aux = aux->sig;
+  }
+
+  return aux;
 }
 
 #endif
