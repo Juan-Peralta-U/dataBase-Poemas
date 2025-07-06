@@ -107,6 +107,7 @@ void ControladorAutores::mostrarAutor(unsigned int IDAUTOR) {
 
 void ControladorAutores::mostrarAutoresEditorial(Lista<unsigned int>* IDAUTOR) {
   cout << "\n--- AUTORES POR CIUDAD DE RESIDENCIA ---\n";
+
   nodoOrd<datosAutor*, char>* auxRes = listaPorCiudadResidencia.buscarPos(0);
   while (auxRes != NULL) {
     datosAutor* autor = auxRes->dato1;

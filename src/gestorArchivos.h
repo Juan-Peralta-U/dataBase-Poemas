@@ -14,8 +14,10 @@ void cargarObras(ControladorObras& ctrlObras, ControladorAutores& ctrlAutores,
                  const std::string& nombreArchivo);
 void cargarEditoriales(ControladorEditoriales& ctrlEditoriales,
                        const std::string& nombreArchivo);
+
 void cargarEdiciones(ControladorObras& ctrlObras,
-                     const std::string& nombreArchivo);
+                     ControladorEditoriales& ctrlEditoriales,
+                     const string& nombreArchivo);
 
 // Funciones para guardar datos
 void guardarAutores(ControladorAutores& ctrlAutores,

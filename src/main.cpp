@@ -219,12 +219,25 @@ void mostrarconsultas() {
         break;
       case 3:
         leerUInt("ID Editorial: ", id);
+
+        if (ctrlEditoriales.autoresPublicadosPorEditorial(id) == nullptr) {
+          cerr << "Editorial no existe\n";
+          break;
+        }
+
         ctrlAutores.mostrarAutoresEditorial(
             ctrlEditoriales.autoresPublicadosPorEditorial(id));
         break;
       case 4:
         leerUInt("Catidad de Autores: ", id);
+
+        if (ctrlEditoriales.autoresPublicadosPorEditorial(id) == nullptr) {
+          cerr << "Editorial no existe\n";
+          break;
+        }
+
         ctrlEditoriales.mostarNumeroDeAutores(id);
+
         break;
       case 5: {
         pila<datosEditorial*> editoriales = ctrlEditoriales.getEditoriales();
@@ -232,9 +245,10 @@ void mostrarconsultas() {
         while (!editoriales.PilaVacia()) {
           datosEditorial* ed = editoriales.Pop();
 
-          int tamañoH, tamañoF;
+          int tamañoH = 0, tamañoF = 0;
 
-          autores = ctrlEditoriales.autoresPublicadosPorEditorial(id);
+          autores =
+              ctrlEditoriales.autoresPublicadosPorEditorial(ed->IDEDITORIAL);
 
           if (autores == nullptr) continue;
 
@@ -250,24 +264,30 @@ void mostrarconsultas() {
                     << " | Pais: " << ed->paisOficina << std::endl;
 
           ctrlAutores.mostrarAutoresPorCiudadResidencia(autores);
+          std::cout << "\n-----------------------------------------------\n";
         }
         break;
       }
       case 6:
         int edad[2], formacion;
-        leerInt("Edad Minima", *edad);
-        leerInt("Edad Minima", edad[1]);
-        leerInt("Formacion", formacion);
+        leerInt("Edad Minima: ", *edad);
+        leerInt("Edad Minima: ", edad[1]);
+        leerInt("Formacion: ", formacion);
         ctrlAutores.mostrarAutoresPorRangoyFormacion(edad,
                                                      Formacion(formacion));
         break;
-      case 7:
+      case 7: {
         int tipo;
         leerUInt("ID Editorial: ", id);
-        leerInt("Tipo poesia", tipo);
-        ctrlEditoriales.autoresPublicadosPorEditorial(id);
-        Lista<unsigned int>* autores;
+        leerInt("Tipo poesia: ", tipo);
         unsigned int autoresId;
+        Lista<unsigned int>* autores =
+            ctrlEditoriales.autoresPublicadosPorEditorial(id);
+
+        if (autores == nullptr) {
+          cerr << "Editorial no existe\n";
+          break;
+        }
 
         for (int i = 0; i < autores->getTam(); i++) {
           autoresId = autores->get(i);
@@ -275,6 +295,7 @@ void mostrarconsultas() {
           ctrlObras.mostrarTiposObraPorAutorYTipo(autoresId, tipoObra(tipo));
         }
         break;
+      }
       case 8:
         break;
       default:
@@ -320,7 +341,7 @@ int main() {
   cargarAutores(ctrlAutores, "autores.txt");
   cargarEditoriales(ctrlEditoriales, "editoriales.txt");
   cargarObras(ctrlObras, ctrlAutores, "obras.txt");
-  cargarEdiciones(ctrlObras, "ediciones.txt");
+  cargarEdiciones(ctrlObras, ctrlEditoriales, "ediciones.txt");
 
   int op;
   do {

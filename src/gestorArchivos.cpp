@@ -108,7 +108,9 @@ void cargarEditoriales(ControladorEditoriales& ctrlEditoriales,
   cout << "Editoriales cargadas correctamente.\n";
 }
 
-void cargarEdiciones(ControladorObras& ctrlObras, const string& nombreArchivo) {
+void cargarEdiciones(ControladorObras& ctrlObras,
+                     ControladorEditoriales& ctrlEditoriales,
+                     const string& nombreArchivo) {
   ifstream archivo(nombreArchivo);
   if (!archivo.is_open()) {
     cout << "Error al abrir el archivo de Ediciones.\n";
@@ -132,6 +134,8 @@ void cargarEdiciones(ControladorObras& ctrlObras, const string& nombreArchivo) {
     datosEdiccion ed{idEditorial, numEdicion, fechaPublicacion,
                      ciudadPublicacion};
     ctrlObras.agregarEdicionAObra(idObra, ed);
+    ctrlEditoriales.insertarAutorPublicado(ctrlObras.mostarIDAUTOR(idObra),
+                                           idEditorial);
   }
   archivo.close();
   cout << "Ediciones cargadas correctamente.\n";

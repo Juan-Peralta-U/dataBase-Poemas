@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#include "lista.h"
+#include "treeRB.h"
+
 void ControladorEditoriales::agregarEditorial(datosEditorial* editorial,
                                               int numPoetas) {
   listaPorNombreEditorial.insertarClave(editorial,
@@ -104,16 +107,31 @@ pila<datosEditorial*> ControladorEditoriales::getEditoriales() {
 
 void ControladorEditoriales::insertarAutorPublicado(unsigned int IDAUTOR,
                                                     unsigned int IDEDITORIAL) {
-  auto autoresNode = autoresPublicados.getNodeKey(IDEDITORIAL);
-  if (!autoresNode) {
-    autoresPublicados.add(IDEDITORIAL, new Lista<unsigned int>());
-    autoresNode = autoresPublicados.getNodeKey(IDEDITORIAL);
+  // Buscar el nodo de la editorial
+  RBNode<Lista<unsigned int>*>* autoresNode =
+      autoresPublicados.getNodeKey(IDEDITORIAL);
+
+  // Si el nodo no existe, crear una nueva lista y agregar la editorial
+  if (autoresNode == nullptr) {
+    Lista<unsigned int>* nuevaLista = new Lista<unsigned int>();
+    autoresPublicados.add(IDEDITORIAL, nuevaLista);
+    nuevaLista->insertarInicio(
+        IDAUTOR);  // Insertar directamente en la nueva lista
+    return;        // Salir después de insertar
   }
+
+  // Si el nodo existe pero su data es nullptr, inicializar la lista
+  if (autoresNode->data == nullptr) {
+    autoresNode->data = new Lista<unsigned int>();
+  }
+
+  // Insertar el autor en la lista existente
   autoresNode->data->insertarInicio(IDAUTOR);
 }
 
 Lista<unsigned int>* ControladorEditoriales::autoresPublicadosPorEditorial(
     unsigned int IDEDITORIAL) {
-  auto autoresNode = autoresPublicados.getNodeKey(IDEDITORIAL);
-  return autoresNode ? autoresNode->data : nullptr;
+  if (autoresPublicados.getNodeKey(IDEDITORIAL) == nullptr) return nullptr;
+
+  return autoresPublicados.getNodeKey(IDEDITORIAL)->data;
 }

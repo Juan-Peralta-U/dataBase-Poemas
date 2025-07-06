@@ -15,7 +15,7 @@ class ControladorEditoriales {
   ListaOrd<datosEditorial*, char> listaPorPais;
   ListaOrd<datosEditorial*, int> listaPorNumPoetas;
   TreeRB<1000, datosEditorial*> arbolEditorial;
-  TreeRB<100, Lista<unsigned int>*> autoresPublicados;
+  TreeRB<1000, Lista<unsigned int>*> autoresPublicados;
 
  public:
   void agregarEditorial(datosEditorial* editorial, int numPoetas = 0);

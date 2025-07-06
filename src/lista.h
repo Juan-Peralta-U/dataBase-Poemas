@@ -140,11 +140,10 @@ bool Lista<T>::borrarPos(int pos) {
 template <class T>
 bool Lista<T>::tieneValor(T value) {
   nodo<T>* aux = cab;
-  for (int i = 0; i < getTam(); i++) {
+  while (aux != nullptr) {  // Verifica aux en cada iteración
     if (aux->dato1 == value) return true;
     aux = aux->sig;
   }
-
   return false;
 }
 
