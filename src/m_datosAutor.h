@@ -18,13 +18,13 @@ de publicación de su primera obra
 */
 
 enum Formacion {
-  literatura,
-  artes,
-  cienciasSociales,
-  ingenierías,
-  áreasDeLaSalud,
-  jurisprudencia,
-  otros
+  literatura = 0,
+  artes = 1,
+  cienciasSociales = 2,
+  ingenierías = 3,
+  áreasDeLaSalud = 4,
+  jurisprudencia = 5,
+  otros = 6
 };
 
 struct datosAutor {

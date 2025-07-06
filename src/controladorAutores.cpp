@@ -1,5 +1,7 @@
+#include <ctime>  // Para obtener la fecha actual del sistema
 #include <string>
 
+#include "lista.h"
 #include "listaOrd.h"
 #include "m_datosAutor.h"
 #include "treeRB.h"
@@ -118,5 +120,128 @@ class ControladorAutores {
                 << " | Ciudad residencia: " << autor->ciudadResidencia
                 << std::endl;
     }
+  }
+
+  void mostrarAutor(unsigned int IDAUTOR) {
+    std::cout << "\n--- LISTA DE AUTORES ---\n";
+    datosAutor* autor = arbolAutor.getNodeKey(IDAUTOR)->data;
+    std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
+              << " " << autor->Apellido
+              << " | Sexo: " << (autor->sexo ? "M" : "F")
+              << " | Ciudad residencia: " << autor->ciudadResidencia
+              << std::endl;
+  }
+
+  void mostrarAutoresEditorial(Lista<unsigned int>* IDAUTOR) {
+    cout << "\n--- LISTA DE AUTORES POR RESIDENCIA ---\n";
+
+    nodoOrd<datosAutor*, char>* auxRes = listaPorCiudadResidencia.buscarPos(0);
+
+    while (NULL != auxRes) {
+      datosAutor* autor = auxRes->dato1;
+      auxRes = auxRes->sig;
+
+      if (IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
+
+      std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
+                << " " << autor->Apellido
+                << " | Sexo: " << (autor->sexo ? "M" : "F")
+                << " | Ciudad residencia: " << autor->ciudadResidencia
+                << std::endl;
+    }
+
+    cout << "\n--- LISTA DE OBRAS POR AÑO ---\n";
+
+    nodoOrd<datosAutor*, int>* auxAnioI = listaPorAñoInicio.buscarPos(0);
+
+    while (NULL != auxRes) {
+      datosAutor* autor = auxRes->dato1;
+      auxRes = auxRes->sig;
+
+      if (IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
+
+      std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
+                << " " << autor->Apellido
+                << " | Sexo: " << (autor->sexo ? "M" : "F")
+                << " | Ciudad residencia: " << autor->ciudadResidencia
+                << " | Año Incio en literatura: " << autor->añoIncio
+                << std::endl;
+    }
+  }
+
+  void mostrarAutoresPorRangoyFormacion(int rangoEdad[2], Formacion formacion) {
+    cout << "\n--- LISTA DE AUTORES POR Ciudad de nacimiento ---\n";
+
+    nodoOrd<datosAutor*, int>* auxRes = listaPorAñoPublicacion.buscarPos(0);
+
+    while (NULL != auxRes) {
+      datosAutor* autor = auxRes->dato1;
+      auxRes = auxRes->sig;
+
+      int edad = calcularEdadActual(autor->IDAUTOR);
+
+      if (rangoEdad[0] > edad || edad > rangoEdad[1]) continue;
+
+      if (formacion != autor->formacion) continue;
+
+      std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
+                << " " << autor->Apellido
+                << " | Sexo: " << (autor->sexo ? "M" : "F")
+                << " | Ciudad residencia: " << autor->ciudadResidencia
+                << std::endl;
+    }
+  }
+
+  void mostrarAutoresPorCiudadResidencia(Lista<unsigned int>* IDAUTOR) {
+    cout << "\n--- LISTA DE AUTORES POR Ciudad de nacimiento ---\n";
+
+    nodoOrd<datosAutor*, char>* auxRes = listaPorCiudadNacimiento.buscarPos(0);
+
+    while (NULL != auxRes) {
+      datosAutor* autor = auxRes->dato1;
+      auxRes = auxRes->sig;
+
+      if (IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
+
+      std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
+                << " " << autor->Apellido
+                << " | Sexo: " << (autor->sexo ? "M" : "F")
+                << " | Ciudad residencia: " << autor->ciudadResidencia
+                << std::endl;
+    }
+  }
+
+  int calcularEdadActual(int IDAUTOR) {
+    datosAutor* autor = arbolAutor.getNodeKey(IDAUTOR)->data;
+
+    // Obtener fecha actual del sistema
+    std::time_t tiempoActual = std::time(nullptr);
+    std::tm* fechaActual = std::localtime(&tiempoActual);
+
+    int diaActual = fechaActual->tm_mday;
+    int mesActual = fechaActual->tm_mon + 1;  // tm_mon: 0 (ene) - 11 (dic)
+    int anioActual = fechaActual->tm_year + 1900;
+
+    // Extraer fecha de nacimiento del autor
+    int diaNac = autor->fechaNacimiento[0];
+    int mesNac = autor->fechaNacimiento[1];
+    int anioNac = autor->fechaNacimiento[2];
+
+    // Calcular edad base (diferencia de años)
+    int edad = anioActual - anioNac;
+
+    // Verificar si ya pasó la fecha de cumpleaños en el año actual
+    if (mesActual < mesNac) {
+      edad--;
+    } else if (mesActual == mesNac && diaActual < diaNac) {
+      edad--;
+    }
+
+    // Manejar casos donde la fecha de nacimiento es futura (edad negativa)
+    if (edad < 0) {
+      return 0;
+    }
+
+    return edad;
   }
 };

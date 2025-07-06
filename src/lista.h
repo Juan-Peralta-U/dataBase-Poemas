@@ -30,6 +30,8 @@ class Lista {
   bool modificarPos(T info1, int pos);
   void vaciarLista();
 
+  bool tieneValor(T value);
+
   void imprimirLista();
 
   int getTam() const { return numElem; }
@@ -133,6 +135,17 @@ bool Lista<T>::borrarPos(int pos) {
 
   numElem--;
   return true;
+}
+
+template <class T>
+bool Lista<T>::tieneValor(T value) {
+  nodo<T>* aux = cab;
+  for (int i = 0; i < getTam(); i++) {
+    if (aux->dato1 == value) return true;
+    aux = aux->sig;
+  }
+
+  return false;
 }
 
 template <class T>

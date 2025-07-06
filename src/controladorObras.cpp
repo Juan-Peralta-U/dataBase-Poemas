@@ -134,4 +134,88 @@ class ControladorObras {
       }
     }
   }
+
+  void mostrarObrasPorAutor(unsigned int IDAUTOR) {
+    cout << "\n--- LISTA DE OBRAS POR AÑO ---\n";
+
+    nodoOrd<ObraPoetica*, int>* auxAnio = listaPorAnioPublicacion.buscarPos(0);
+
+    while (NULL != auxAnio) {
+      ObraPoetica* obra = auxAnio->dato1;
+
+      auxAnio = auxAnio->sig;
+
+      if (obra->IDAUTOR != IDAUTOR) continue;
+
+      cout << "Autor: " << obra->IDAUTOR << " | Nombre: " << obra->nombre
+           << " | Tipo: " << obra->obra << " | Año: "
+           << obra->ediciones.buscarPos(0)->dato1.fechaDePublicacion << endl;
+    }
+
+    nodoOrd<ObraPoetica*, unsigned int>* auxEdi =
+        listaPorIDEditorial.buscarPos(0);
+
+    cout << "\n--- LISTA DE OBRAS Editorial ---\n";
+    while (NULL != auxEdi) {
+      ObraPoetica* obra = auxEdi->dato1;
+
+      auxEdi = auxEdi->sig;
+
+      if (obra->IDAUTOR != IDAUTOR) continue;
+
+      cout << "Autor: " << obra->IDAUTOR << " | Nombre: " << obra->nombre
+           << " | Tipo: " << obra->obra << " | Editorial: "
+           << obra->ediciones.buscarPos(0)->dato1.IDEDITORIAL << endl;
+    }
+  }
+
+  void mostrarTiposObraPorAutor(unsigned int IDAUTOR) {
+    cout << "\n--- LISTA DE OBRAS POR AÑO ---\n";
+
+    nodoOrd<ObraPoetica*, tipoObra>* auxTipo = listaPorTipoPoesia.buscarPos(0);
+
+    while (NULL != auxTipo) {
+      ObraPoetica* obra = auxTipo->dato1;
+
+      auxTipo = auxTipo->sig;
+
+      if (obra->IDAUTOR != IDAUTOR) continue;
+
+      cout << "Autor: " << obra->IDAUTOR << " | Nombre: " << obra->nombre
+           << " | Tipo: " << obra->obra << " | Año: "
+           << obra->ediciones.buscarPos(0)->dato1.fechaDePublicacion << endl;
+
+      for (int i = 0; i < obra->ediciones.getTam(); i++) {
+        const datosEdiccion& ed = obra->ediciones.get(i);
+        cout << "  Edicion #" << ed.numeroEdicion
+             << ", Editorial: " << ed.IDEDITORIAL
+             << ", Fecha: " << ed.fechaDePublicacion
+             << ", Ciudad: " << ed.ciudadDePublicacion << endl;
+      }
+    }
+  }
+
+  void mostrarTiposObraPorAutorYTipo(unsigned int IDAUTOR, tipoObra tipo) {
+    cout << "\n--- TODAS LAS EDICIONES ---\n";
+    pila<ObraPoetica*> obras = arbolObra.inorden();
+    while (!obras.PilaVacia()) {
+      ObraPoetica* obra = obras.Pop();
+
+      if (obra->IDAUTOR != IDAUTOR) continue;
+      if (obra->obra != tipo) continue;
+
+      cout << "Obra: " << obra->nombre << " (Autor: " << obra->IDAUTOR << ")\n";
+      int tam = obra->ediciones.getTam();
+      for (int i = 0; i < tam; ++i) {
+        const datosEdiccion& ed = obra->ediciones.get(i);
+        cout << "  Edicion #" << ed.numeroEdicion
+             << ", Editorial: " << ed.IDEDITORIAL
+             << ", Fecha: " << ed.fechaDePublicacion
+             << ", Ciudad: " << ed.ciudadDePublicacion << endl;
+      }
+    }
+  }
+  unsigned int mostarIDAUTOR(unsigned int IDOBRA) {
+    return buscarObra(IDOBRA)->IDAUTOR;
+  }
 };
