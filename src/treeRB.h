@@ -509,22 +509,22 @@ pila<int> TreeRB<n, s>::nivelesKeys() {
 
 template <int n, typename s>
 pila<int> TreeRB<n, s>::inordenKeys() {
-    pila<int> resultado;
-    Stack<RBNode<s> *> stack;
-    RBNode<s> *current = datos[0].izq;
+  pila<int> resultado;
+  Stack<RBNode<s> *> stack;
+  RBNode<s> *current = datos[0].izq;
 
-    while (current != datos || !stack.isEmpty()) {
-        while (current != datos) {
-            stack.push(current);
-            current = current->izq;
-        }
-        if (!stack.isEmpty()) {
-            current = stack.pop();
-            resultado.Push(current->key);
-            current = current->der;
-        }
+  while (current != datos || !stack.isEmpty()) {
+    while (current != datos) {
+      stack.push(current);
+      current = current->izq;
     }
-    return resultado;
+    if (!stack.isEmpty()) {
+      current = stack.pop();
+      resultado.Push(current->key);
+      current = current->der;
+    }
+  }
+  return resultado;
 }
 
 #endif

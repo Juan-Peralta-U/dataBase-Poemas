@@ -1,119 +1,119 @@
-#include <string>
+#include "controladorEditoriales.h"
 
-#include "lista.h"
-#include "listaOrd.h"
-#include "m_Editorial.h"
-#include "treeRB.h"
+#include <iostream>
 
-class ControladorEditoriales {
- private:
-  // Listas auxiliares para consultas eficientes
-  ListaOrd<datosEditorial*, char> listaPorNombreEditorial;   // Para búsquedas por nombre
-  ListaOrd<datosEditorial*, char> listaPorCiudad;            // Para búsquedas por ciudad
-  ListaOrd<datosEditorial*, char> listaPorPais;              // Para búsquedas por país
-  ListaOrd<datosEditorial*, int> listaPorNumPoetas;          // Para consultas por cantidad de poetas publicados
-  TreeRB<1000, datosEditorial*> arbolEditorial;              // Clave = IDEDITORIAL
-  TreeRB<100, Lista<unsigned int>*> autoresPublicados;       // Clave = IDEDITORIAL
+void ControladorEditoriales::agregarEditorial(datosEditorial* editorial,
+                                              int numPoetas) {
+  listaPorNombreEditorial.insertarClave(editorial,
+                                        editorial->nombreEditorial[0]);
+  listaPorCiudad.insertarClave(editorial, editorial->ciudadOficina[0]);
+  listaPorPais.insertarClave(editorial, editorial->paisOficina[0]);
+  listaPorNumPoetas.insertarClave(editorial, numPoetas);
+  arbolEditorial.add(editorial->IDEDITORIAL, editorial);
+}
 
- public:
-  // Agregar una editorial
-  void agregarEditorial(datosEditorial* editorial, int numPoetas = 0) {
-    listaPorNombreEditorial.insertarClave(editorial,
-                                          editorial->nombreEditorial[0]);
-    listaPorCiudad.insertarClave(editorial, editorial->ciudadOficina[0]);
-    listaPorPais.insertarClave(editorial, editorial->paisOficina[0]);
-    listaPorNumPoetas.insertarClave(editorial, numPoetas);
-    arbolEditorial.add(editorial->IDEDITORIAL, editorial);
+void ControladorEditoriales::eliminarEditorial(unsigned int IDEDITORIAL,
+                                               int numPoetas) {
+  datosEditorial* del = arbolEditorial.getNodeKey(IDEDITORIAL)->data;
+  if (!del) return;
+
+  listaPorNombreEditorial.borrarClave(del->nombreEditorial[0], del);
+  listaPorCiudad.borrarClave(del->ciudadOficina[0], del);
+  listaPorPais.borrarClave(del->paisOficina[0], del);
+  listaPorNumPoetas.borrarClave(numPoetas, del);
+  arbolEditorial.deleteKey(IDEDITORIAL);
+
+  // Eliminar lista de autores publicados si existe
+  auto autoresNode = autoresPublicados.getNodeKey(IDEDITORIAL);
+  if (autoresNode) {
+    delete autoresNode->data;
+    autoresPublicados.deleteKey(IDEDITORIAL);
+  }
+}
+
+void ControladorEditoriales::modificarEditorial(unsigned int IDEDITORIAL,
+                                                std::string nuevoNombre,
+                                                std::string nuevaCiudad,
+                                                std::string nuevoPais,
+                                                int numPoetas) {
+  datosEditorial* aux = arbolEditorial.getNodeKey(IDEDITORIAL)->data;
+  if (!aux) return;
+
+  int oldNumPoetas = numPoetas;  // Asumiendo que recibimos el valor antiguo
+
+  if (aux->nombreEditorial != nuevoNombre) {
+    listaPorNombreEditorial.borrarClave(aux->nombreEditorial[0], aux);
+    aux->nombreEditorial = nuevoNombre;
+    listaPorNombreEditorial.insertarClave(aux, aux->nombreEditorial[0]);
+  }
+  if (aux->ciudadOficina != nuevaCiudad) {
+    listaPorCiudad.borrarClave(aux->ciudadOficina[0], aux);
+    aux->ciudadOficina = nuevaCiudad;
+    listaPorCiudad.insertarClave(aux, aux->ciudadOficina[0]);
+  }
+  if (aux->paisOficina != nuevoPais) {
+    listaPorPais.borrarClave(aux->paisOficina[0], aux);
+    aux->paisOficina = nuevoPais;
+    listaPorPais.insertarClave(aux, aux->paisOficina[0]);
   }
 
-  // Eliminar una editorial y actualizar todas las listas
-  void eliminarEditorial(unsigned int IDEDITORIAL, int numPoetas = 0) {
-    datosEditorial* del = arbolEditorial.getNodeKey(IDEDITORIAL)->data;
-    listaPorNombreEditorial.borrarClave(del->nombreEditorial[0], del);
-    listaPorCiudad.borrarClave(del->ciudadOficina[0], del);
-    listaPorPais.borrarClave(del->paisOficina[0], del);
-    listaPorNumPoetas.borrarClave(numPoetas, del);
-    arbolEditorial.deleteKey(IDEDITORIAL);
-    // delete del; // Solo si manejas memoria dinámica
+  // Actualizar número de poetas
+  listaPorNumPoetas.borrarClave(oldNumPoetas, aux);
+  listaPorNumPoetas.insertarClave(aux, numPoetas);
+}
+
+datosEditorial const* ControladorEditoriales::buscarEditorial(
+    unsigned int IDEDITORIAL) {
+  auto node = arbolEditorial.getNodeKey(IDEDITORIAL);
+  return node ? node->data : nullptr;
+}
+
+void ControladorEditoriales::mostrarEditoriales() {
+  cout << "\n--- LISTA DE EDITORIALES ---\n";
+  pila<datosEditorial*> editoriales = arbolEditorial.inorden();
+  while (!editoriales.PilaVacia()) {
+    datosEditorial* ed = editoriales.Pop();
+    cout << "ID: " << ed->IDEDITORIAL << " | Nombre: " << ed->nombreEditorial
+         << " | Ciudad: " << ed->ciudadOficina << " | Pais: " << ed->paisOficina
+         << endl;
   }
+}
 
-  // Modificar datos de una editorial
-  void modificarEditorial(unsigned int IDEDITORIAL, std::string nuevoNombre,
-                          std::string nuevaCiudad, std::string nuevoPais,
-                          int numPoetas = 0) {
-    datosEditorial* aux = arbolEditorial.getNodeKey(IDEDITORIAL)->data;
-    // Actualiza listas si cambian claves
-    if (aux->nombreEditorial != nuevoNombre) {
-      listaPorNombreEditorial.borrarClave(aux->nombreEditorial[0], aux);
-      aux->nombreEditorial = nuevoNombre;
-      listaPorNombreEditorial.insertarClave(aux, aux->nombreEditorial[0]);
-    }
-    if (aux->ciudadOficina != nuevaCiudad) {
-      listaPorCiudad.borrarClave(aux->ciudadOficina[0], aux);
-      aux->ciudadOficina = nuevaCiudad;
-      listaPorCiudad.insertarClave(aux, aux->ciudadOficina[0]);
-    }
-    if (aux->paisOficina != nuevoPais) {
-      listaPorPais.borrarClave(aux->paisOficina[0], aux);
-      aux->paisOficina = nuevoPais;
-      listaPorPais.insertarClave(aux, aux->paisOficina[0]);
-    }
+void ControladorEditoriales::mostarNumeroDeAutores(int cantidad) {
+  cout << "\n--- EDITORIALES CON AL MENOS " << cantidad
+       << " AUTORES PUBLICADOS ---\n";
+  pila<datosEditorial*> editoriales = arbolEditorial.inorden();
+  while (!editoriales.PilaVacia()) {
+    datosEditorial* ed = editoriales.Pop();
+    auto autoresNode = autoresPublicados.getNodeKey(ed->IDEDITORIAL);
+    if (!autoresNode) continue;
 
-    // Actualiza número de poetas publicados si es necesario
-    listaPorNumPoetas.borrarClave(numPoetas, aux);
-    listaPorNumPoetas.insertarClave(aux, numPoetas);
+    int tam = autoresNode->data->getTam();
+    if (tam < cantidad) continue;
+
+    cout << "ID: " << ed->IDEDITORIAL << " | Nombre: " << ed->nombreEditorial
+         << " | Cantidad de autores: " << tam
+         << " | Ciudad: " << ed->ciudadOficina << " | Pais: " << ed->paisOficina
+         << endl;
   }
+}
 
-  // Buscar una editorial por ID
-  datosEditorial const* buscarEditorial(unsigned int IDEDITORIAL) {
-    return arbolEditorial.getNodeKey(IDEDITORIAL)->data;
+pila<datosEditorial*> ControladorEditoriales::getEditoriales() {
+  return arbolEditorial.inorden();
+}
+
+void ControladorEditoriales::insertarAutorPublicado(unsigned int IDAUTOR,
+                                                    unsigned int IDEDITORIAL) {
+  auto autoresNode = autoresPublicados.getNodeKey(IDEDITORIAL);
+  if (!autoresNode) {
+    autoresPublicados.add(IDEDITORIAL, new Lista<unsigned int>());
+    autoresNode = autoresPublicados.getNodeKey(IDEDITORIAL);
   }
+  autoresNode->data->insertarInicio(IDAUTOR);
+}
 
-  // Mostrar todas las editoriales guardadas
-  void mostrarEditoriales() {
-    std::cout << "\n--- LISTA DE EDITORIALES ---\n";
-    pila<datosEditorial*> editoriales = arbolEditorial.inorden();
-    while (!editoriales.PilaVacia()) {
-      datosEditorial* ed = editoriales.Pop();
-      std::cout << "ID: " << ed->IDEDITORIAL
-                << " | Nombre: " << ed->nombreEditorial
-                << " | Ciudad: " << ed->ciudadOficina
-                << " | Pais: " << ed->paisOficina << std::endl;
-    }
-  }
-
-  void mostarNumeroDeAutores(int cantidad) {
-    std::cout << "\n--- LISTA DE EDITORIALES por cantidad publicado ---\n";
-    pila<datosEditorial*> editoriales = arbolEditorial.inorden();
-    while (!editoriales.PilaVacia()) {
-      datosEditorial* ed = editoriales.Pop();
-      if (autoresPublicados.getNodeKey(ed->IDEDITORIAL) == nullptr) continue;
-      int tamaño =
-          autoresPublicados.getNodeKey(ed->IDEDITORIAL)->data->getTam();
-      if (tamaño < cantidad) continue;
-
-      std::cout << "ID: " << ed->IDEDITORIAL
-                << " | Nombre: " << ed->nombreEditorial
-                << " | Cantidad: " << tamaño
-                << " | Ciudad: " << ed->ciudadOficina
-                << " | Pais: " << ed->paisOficina << std::endl;
-    }
-  }
-
-  pila<datosEditorial*> getEditoriales(){
-    return arbolEditorial.inorden();
-  }
-  
-  void insertarAutorPublicado(unsigned int IDAUTOR, unsigned int IDEDITORIAL) {
-    if (autoresPublicados.getNodeKey(IDEDITORIAL) == nullptr)
-      autoresPublicados.add(IDEDITORIAL, new Lista<unsigned int>());
-
-    autoresPublicados.getNodeKey(IDEDITORIAL)->data->insertarInicio(IDAUTOR);
-  }
-
-  Lista<unsigned int>* autoresPublicadosPorEditorial(unsigned int IDEDITORIAL) {
-    return autoresPublicados.getNodeKey(IDEDITORIAL)->data;
-  }
-
-  pila<datosEditorial*> getEditoriales() { return arbolEditorial.inorden(); }
-};
+Lista<unsigned int>* ControladorEditoriales::autoresPublicadosPorEditorial(
+    unsigned int IDEDITORIAL) {
+  auto autoresNode = autoresPublicados.getNodeKey(IDEDITORIAL);
+  return autoresNode ? autoresNode->data : nullptr;
+}
