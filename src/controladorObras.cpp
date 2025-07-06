@@ -1,15 +1,16 @@
 // ControladorObras.cpp
 // ------------------------------------------
-// Clase encargada de administrar las obras poéticas del sistema
+// Clase encargada de administrar las obras poéticas del sistema,
 // incluyendo su registro, modificación, eliminación y consultas por diferentes criterios.
 // Utiliza listas ordenadas y árbol rojo-negro para eficiencia en búsquedas.
-#include <string>
-#include "listaOrd.h"
-#include "m_edicion.h"
-#include "m_obrapoetica.h"
-#include "pila.h"
-#include "treeRB.h"
+#include <string>      // Librería para manejo de cadenas
+#include "listaOrd.h" // Incluye estructura de lista ordenada
+#include "m_edicion.h" // Estructura con la información de cada edición
+#include "m_obrapoetica.h" // Clase base de cada obra poética
+#include "pila.h" // Para recorrer estructuras como el árbol
+#include "treeRB.h" // Árbol rojinegro para eficiencia en búsquedas por ID
 
+// Clase encargada de controlar todas las operaciones sobre las obras poéticas
 class ControladorObras {
  private:
   // Listas auxiliares para consultas eficientes
@@ -23,10 +24,11 @@ class ControladorObras {
   // Agregar una obra (sin ediciones)
   void agregarObra(unsigned int IDOBRA, unsigned int IDAUTOR, tipoObra obraTipo,
                    const std::string& nombre) {
-    ObraPoetica* nueva = new ObraPoetica{IDAUTOR, obraTipo, nombre};
-    listaPorTipoPoesia.insertarClave(nueva, obraTipo);
-    listaPorIDAutor.insertarClave(nueva, IDAUTOR);
-    arbolObra.add(IDOBRA, nueva);
+    ObraPoetica* nueva = new ObraPoetica{IDAUTOR, obraTipo, nombre}; // Se crea la obra
+    listaPorTipoPoesia.insertarClave(nueva, obraTipo);  // Se agrega a la lista por tipo
+    listaPorIDAutor.insertarClave(nueva, IDAUTOR); // Se agrega a la lista por autor
+    arbolObra.add(IDOBRA, nueva); // Se agrega al árbol por su ID
+   
     // No se agrega a listaPorAnioPublicacion ni listaPorIDEditorial hasta que
     // tenga ediciones
   }
@@ -42,32 +44,34 @@ class ControladorObras {
       const datosEdiccion& ed = del->ediciones.get(i);
       listaPorIDEditorial.borrarClave(ed.IDEDITORIAL, del);
       if (ed.fechaDePublicacion.size() >= 10) {
-        int anio = std::stoi(ed.fechaDePublicacion.substr(6, 4));
+        int anio = std::stoi(ed.fechaDePublicacion.substr(6, 4)); // Extrae año
         listaPorAnioPublicacion.borrarClave(anio, del);
       }
     }
-    arbolObra.deleteKey(IDOBRA);
-    delete del;
+    arbolObra.deleteKey(IDOBRA); // Se elimina del árbol
+    delete del; // Se libera la memoria
   }
 
   // Modificar datos básicos de una obra (no ediciones)
   void modificarObra(unsigned int IDOBRA, unsigned int nuevoIDAUTOR,
                      tipoObra nuevoTipo, const std::string& nuevoNombre) {
     ObraPoetica* aux = arbolObra.getNodeKey(IDOBRA)->data;
+   // Si el tipo cambia, se actualiza en listaPorTipoPoesia
     if (aux->obra != nuevoTipo) {
       listaPorTipoPoesia.borrarClave(aux->obra, aux);
       aux->obra = nuevoTipo;
       listaPorTipoPoesia.insertarClave(aux, aux->obra);
     }
+   // Si el autor cambia, se actualiza en listaPorIDAutor
     if (aux->IDAUTOR != nuevoIDAUTOR) {
       listaPorIDAutor.borrarClave(aux->IDAUTOR, aux);
       aux->IDAUTOR = nuevoIDAUTOR;
       listaPorIDAutor.insertarClave(aux, aux->IDAUTOR);
     }
-    aux->nombre = nuevoNombre;
+    aux->nombre = nuevoNombre; // Se actualiza el nombre
   }
 
-  // Devuelve puntero constante a una obra buscada por ID
+  // Retorna una obra específica según su ID
   ObraPoetica const* buscarObra(unsigned int IDOBRA) {
     return arbolObra.getNodeKey(IDOBRA)->data;
   }
@@ -75,7 +79,7 @@ class ControladorObras {
   // Agregar una edición a una obra y actualizar listas auxiliares
   void agregarEdicionAObra(unsigned int IDOBRA, const datosEdiccion& edicion) {
     ObraPoetica* obra = arbolObra.getNodeKey(IDOBRA)->data;
-    obra->ediciones.insertarFinal(edicion);
+    obra->ediciones.insertarFinal(edicion);  // Se agrega la edición
     listaPorIDEditorial.insertarClave(obra, edicion.IDEDITORIAL);
     // Extraer año de la fecha (formato "dd/mm/aaaa")
     if (edicion.fechaDePublicacion.size() >= 10) {
@@ -97,7 +101,7 @@ class ControladorObras {
               std::stoi(obra->ediciones.get(i).fechaDePublicacion.substr(6, 4));
           listaPorAnioPublicacion.borrarClave(anio, obra);
         }
-        obra->ediciones.borrarPos(i);
+        obra->ediciones.borrarPos(i); // Elimina del arreglo de ediciones
         break;
       }
     }
@@ -130,7 +134,7 @@ class ControladorObras {
       }
     }
   }
-// Métodos de filtrado por autor, tipo, año, editorial, etc.
+ // Muestra todas las obras de un autor por año y por editorial
   void mostrarObrasPorAutor(unsigned int IDAUTOR) {
     cout << "\n--- LISTA DE OBRAS POR AÑO ---\n";
 
@@ -164,7 +168,7 @@ class ControladorObras {
            << obra->ediciones.buscarPos(0)->dato1.IDEDITORIAL << endl;
     }
   }
-
+// Muestra todas las obras de un autor clasificadas por tipo
   void mostrarTiposObraPorAutor(unsigned int IDAUTOR) {
     cout << "\n--- LISTA DE OBRAS POR AÑO ---\n";
 
@@ -180,7 +184,7 @@ class ControladorObras {
       cout << "Autor: " << obra->IDAUTOR << " | Nombre: " << obra->nombre
            << " | Tipo: " << obra->obra << " | Año: "
            << obra->ediciones.buscarPos(0)->dato1.fechaDePublicacion << endl;
-
+// Muestra todas las ediciones de esa obra
       for (int i = 0; i < obra->ediciones.getTam(); i++) {
         const datosEdiccion& ed = obra->ediciones.get(i);
         cout << "  Edicion #" << ed.numeroEdicion
@@ -208,10 +212,10 @@ class ControladorObras {
     return ediciones;
   }
   
-  // Devuelve una pila con las claves (IDOBRA) en inorden
+ // Retorna las claves (IDOBRA) en orden ascendente
   pila<int> getClavesObras() {
     return arbolObra.inordenKeys();
-    
+     // Muestra obras de un autor que pertenecen a un tipo específico
   void mostrarTiposObraPorAutorYTipo(unsigned int IDAUTOR, tipoObra tipo) {
     cout << "\n--- TODAS LAS EDICIONES ---\n";
     pila<ObraPoetica*> obras = arbolObra.inorden();
@@ -232,7 +236,7 @@ class ControladorObras {
       }
     }
   }
-    // Retorna el IDAUTOR a partir del ID de la obra
+  // Retorna el ID del autor de una obra específica
   unsigned int mostarIDAUTOR(unsigned int IDOBRA) {
     return buscarObra(IDOBRA)->IDAUTOR;
   }
