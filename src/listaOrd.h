@@ -23,6 +23,8 @@ class ListaOrd {
     cab = nullptr;
   }
 
+  int getTam() { return numElem; }
+
   bool listaVacia() { return (cab == nullptr); }
 
   void insertarClave(T info1, S clave);
