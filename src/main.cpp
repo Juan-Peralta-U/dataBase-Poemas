@@ -253,7 +253,12 @@ void mostrarconsultas() {
         break;
       }
       case 6:
-
+        int edad[2], formacion;
+        leerInt("Edad Minima", *edad);
+        leerInt("Edad Minima", edad[1]);
+        leerInt("Formacion", formacion);
+        ctrlAutores.mostrarAutoresPorRangoyFormacion(edad,
+                                                     Formacion(formacion));
         break;
       case 7:
         break;
