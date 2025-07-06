@@ -168,4 +168,30 @@ class ControladorObras {
            << obra->ediciones.buscarPos(0)->dato1.IDEDITORIAL << endl;
     }
   }
+
+  void mostrarTiposObraPorAutor(unsigned int IDAUTOR) {
+    cout << "\n--- LISTA DE OBRAS POR AÑO ---\n";
+
+    nodoOrd<ObraPoetica*, tipoObra>* auxTipo = listaPorTipoPoesia.buscarPos(0);
+
+    while (NULL != auxTipo) {
+      ObraPoetica* obra = auxTipo->dato1;
+
+      auxTipo = auxTipo->sig;
+
+      if (obra->IDAUTOR != IDAUTOR) continue;
+
+      cout << "Autor: " << obra->IDAUTOR << " | Nombre: " << obra->nombre
+           << " | Tipo: " << obra->obra << " | Año: "
+           << obra->ediciones.buscarPos(0)->dato1.fechaDePublicacion << endl;
+
+      for (int i = 0; i < obra->ediciones.getTam(); i++) {
+        const datosEdiccion& ed = obra->ediciones.get(i);
+        cout << "  Edicion #" << ed.numeroEdicion
+             << ", Editorial: " << ed.IDEDITORIAL
+             << ", Fecha: " << ed.fechaDePublicacion
+             << ", Ciudad: " << ed.ciudadDePublicacion << endl;
+      }
+    }
+  }
 };
