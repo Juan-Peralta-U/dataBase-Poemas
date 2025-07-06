@@ -194,4 +194,8 @@ class ControladorObras {
       }
     }
   }
+
+  unsigned int mostarIDAUTOR(unsigned int IDOBRA) {
+    return buscarObra(IDOBRA)->IDAUTOR;
+  }
 };

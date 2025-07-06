@@ -1,5 +1,6 @@
 #include <string>
 
+#include "lista.h"
 #include "listaOrd.h"
 #include "m_datosAutor.h"
 #include "treeRB.h"
@@ -116,6 +117,43 @@ class ControladorAutores {
                 << " " << autor->Apellido
                 << " | Sexo: " << (autor->sexo ? "M" : "F")
                 << " | Ciudad residencia: " << autor->ciudadResidencia
+                << std::endl;
+    }
+  }
+
+  void mostrarAutoresEditorial(Lista<unsigned int>* IDAUTOR) {
+    cout << "\n--- LISTA DE AUTORES POR RESIDENCIA ---\n";
+
+    nodoOrd<datosAutor*, char>* auxRes = listaPorCiudadResidencia.buscarPos(0);
+
+    while (NULL != auxRes) {
+      datosAutor* autor = auxRes->dato1;
+      auxRes = auxRes->sig;
+
+      if (IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
+
+      std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
+                << " " << autor->Apellido
+                << " | Sexo: " << (autor->sexo ? "M" : "F")
+                << " | Ciudad residencia: " << autor->ciudadResidencia
+                << std::endl;
+    }
+
+    cout << "\n--- LISTA DE OBRAS POR AÑO ---\n";
+
+    nodoOrd<datosAutor*, int>* auxAnioI = listaPorAñoInicio.buscarPos(0);
+
+    while (NULL != auxRes) {
+      datosAutor* autor = auxRes->dato1;
+      auxRes = auxRes->sig;
+
+      if (IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
+
+      std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
+                << " " << autor->Apellido
+                << " | Sexo: " << (autor->sexo ? "M" : "F")
+                << " | Ciudad residencia: " << autor->ciudadResidencia
+                << " | Año Incio en literatura: " << autor->añoIncio
                 << std::endl;
     }
   }

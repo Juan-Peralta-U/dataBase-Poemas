@@ -178,8 +178,11 @@ void crudObras() {
       leerUInt("Numero de edicion: ", numEdicion);
       leerString("Fecha de publicacion (dd/mm/aaaa): ", fecha);
       leerString("Ciudad de publicacion: ", ciudad);
+
       datosEdiccion ed{idEditorial, numEdicion, fecha, ciudad};
       ctrlObras.agregarEdicionAObra(idObra, ed);
+      ctrlEditoriales.insertarAutorPublicado(ctrlObras.mostarIDAUTOR(idObra),
+                                             idEditorial);
       cout << "Edicion agregada.\n";
     } else if (op == 5) {
       unsigned int idObra, numEdicion;
@@ -193,6 +196,7 @@ void crudObras() {
 
 void mostrarconsultas() {
   int op;
+  unsigned int id;
 
   do {
     cout << "\n--- CONSULTAS ---\n1. Total de obras por autor \n2. Obras del "
@@ -205,13 +209,17 @@ void mostrarconsultas() {
     cin.ignore();
     switch (op) {
       case 1:
-        unsigned int idAutor;
-        leerUInt("ID Autor: ", idAutor);
-        ctrlObras.mostrarObrasPorAutor(idAutor);
+        leerUInt("ID Autor: ", id);
+        ctrlObras.mostrarObrasPorAutor(id);
         break;
       case 2:
+        leerUInt("ID Autor: ", id);
+        ctrlObras.mostrarTiposObraPorAutor(id);
         break;
       case 3:
+        leerUInt("ID Editorial: ", id);
+        ctrlAutores.mostrarAutoresEditorial(
+            ctrlEditoriales.autoresPublicadosPorEditorial(id));
         break;
       case 4:
         break;

@@ -1,5 +1,6 @@
 #include <string>
 
+#include "lista.h"
 #include "listaOrd.h"
 #include "m_Editorial.h"
 #include "treeRB.h"
@@ -13,7 +14,8 @@ class ControladorEditoriales {
   ListaOrd<datosEditorial*, char> listaPorPais;    // Para búsquedas por país
   ListaOrd<datosEditorial*, int>
       listaPorNumPoetas;  // Para consultas por cantidad de poetas publicados
-  TreeRB<100, datosEditorial*> arbolEditorial;  // Clave = IDEDITORIAL
+  TreeRB<100, datosEditorial*> arbolEditorial;          // Clave = IDEDITORIAL
+  TreeRB<100, Lista<unsigned int>*> autoresPublicados;  // Clave = IDEDITORIAL
 
  public:
   // Agregar una editorial
@@ -79,5 +81,16 @@ class ControladorEditoriales {
                 << " | Ciudad: " << ed->ciudadOficina
                 << " | Pais: " << ed->paisOficina << std::endl;
     }
+  }
+
+  void insertarAutorPublicado(unsigned int IDAUTOR, unsigned int IDEDITORIAL) {
+    if (autoresPublicados.getNodeKey(IDEDITORIAL) == nullptr)
+      autoresPublicados.add(IDEDITORIAL, new Lista<unsigned int>());
+
+    autoresPublicados.getNodeKey(IDEDITORIAL)->data->insertarInicio(IDAUTOR);
+  }
+
+  Lista<unsigned int>* autoresPublicadosPorEditorial(unsigned int IDEDITORIAL) {
+    return autoresPublicados.getNodeKey(IDEDITORIAL)->data;
   }
 };
