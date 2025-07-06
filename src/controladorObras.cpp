@@ -1,9 +1,13 @@
+// ControladorObras.cpp
+// ------------------------------------------
+// Clase encargada de administrar las obras poéticas del sistema
+// incluyendo su registro, modificación, eliminación y consultas por diferentes criterios.
+// Utiliza listas ordenadas y árbol rojo-negro para eficiencia en búsquedas.
 #include <string>
-
 #include "listaOrd.h"
 #include "m_edicion.h"
 #include "m_obrapoetica.h"
-#include "pila.h"  // Asegúrate de incluir la definición de pila
+#include "pila.h"
 #include "treeRB.h"
 
 class ControladorObras {
@@ -63,7 +67,7 @@ class ControladorObras {
     aux->nombre = nuevoNombre;
   }
 
-  // Buscar una obra por ID
+  // Devuelve puntero constante a una obra buscada por ID
   ObraPoetica const* buscarObra(unsigned int IDOBRA) {
     return arbolObra.getNodeKey(IDOBRA)->data;
   }
@@ -98,10 +102,6 @@ class ControladorObras {
       }
     }
   }
-
-  // Puedes agregar aquí métodos para consultas avanzadas usando las listas
-  // auxiliares
-
   // Mostrar todas las obras guardadas
   void mostrarObras() {
     cout << "\n--- LISTA DE OBRAS ---\n";
@@ -130,7 +130,7 @@ class ControladorObras {
       }
     }
   }
-
+// Métodos de filtrado por autor, tipo, año, editorial, etc.
   void mostrarObrasPorAutor(unsigned int IDAUTOR) {
     cout << "\n--- LISTA DE OBRAS POR AÑO ---\n";
 
@@ -190,11 +190,11 @@ class ControladorObras {
       }
     }
   }
-
+// Devuelve todas las obras en pila
   pila<ObraPoetica*> getObras() {
     return arbolObra.inorden();
   }
-
+// Devuelve todas las ediciones
   pila<datosEdiccion> getEdiciones() {
     pila<datosEdiccion> ediciones;
     pila<ObraPoetica*> obras = arbolObra.inorden();
@@ -232,6 +232,7 @@ class ControladorObras {
       }
     }
   }
+    // Retorna el IDAUTOR a partir del ID de la obra
   unsigned int mostarIDAUTOR(unsigned int IDOBRA) {
     return buscarObra(IDOBRA)->IDAUTOR;
   }
