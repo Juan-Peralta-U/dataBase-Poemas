@@ -1,6 +1,7 @@
+// Librerías estándar
 #include <iostream>
 #include <string>
-
+// Controladores y modelos del proyecto
 #include "controladorAutores.h"
 #include "controladorEditoriales.h"
 #include "controladorObras.h"
@@ -12,6 +13,7 @@
 
 using namespace std;
 
+// Instancias globales de los controladores
 ControladorObras ctrlObras;
 ControladorAutores ctrlAutores;
 ControladorEditoriales ctrlEditoriales;
@@ -40,6 +42,7 @@ void crudAutores() {
             "Volver\nOpcion: ";
     cin >> op;
     cin.ignore();
+    // Crear nuevo autor
     if (op == 1) {
       datosAutor* a = new datosAutor;
       leerUInt("ID: ", a->IDAUTOR);
@@ -59,11 +62,13 @@ void crudAutores() {
       ctrlAutores.agregarAutor(a);
       cout << "Autor agregado.\n";
     } else if (op == 2) {
+      // Eliminar autor
       unsigned int id;
       leerUInt("ID a eliminar: ", id);
       ctrlAutores.eliminarAutor(id);
       cout << "Autor eliminado.\n";
     } else if (op == 3) {
+      // Modificar autor
       unsigned int id;
       leerUInt("ID a modificar: ", id);
       datosAutor* a = new datosAutor;
@@ -99,6 +104,7 @@ void crudEditoriales() {
     cin >> op;
     cin.ignore();
     if (op == 1) {
+            // Crear nueva editorial
       datosEditorial* e = new datosEditorial;
       leerUInt("ID: ", e->IDEDITORIAL);
       leerString("Nombre: ", e->nombreEditorial);
@@ -107,11 +113,13 @@ void crudEditoriales() {
       ctrlEditoriales.agregarEditorial(e);
       cout << "Editorial agregada.\n";
     } else if (op == 2) {
+            // Eliminar editorial
       unsigned int id;
       leerUInt("ID a eliminar: ", id);
       ctrlEditoriales.eliminarEditorial(id);
       cout << "Editorial eliminada.\n";
     } else if (op == 3) {
+            // Modificar editorial
       unsigned int id;
       leerUInt("ID a modificar: ", id);
       string nombre, ciudad, pais;
@@ -133,6 +141,7 @@ void crudObras() {
     cin >> op;
     cin.ignore();
     if (op == 1) {
+            // Agregar nueva obra
       unsigned int idObra, idAutor;
       string nombre;
       int tipo;
@@ -150,11 +159,13 @@ void crudObras() {
                             nombre);
       cout << "Obra agregada.\n";
     } else if (op == 2) {
+            // Eliminar obra
       unsigned int idObra;
       leerUInt("ID a eliminar: ", idObra);
       ctrlObras.eliminarObra(idObra);
       cout << "Obra eliminada.\n";
     } else if (op == 3) {
+            // Modificar obra
       unsigned int idObra, idAutor;
       string nombre;
       int tipo;
@@ -166,6 +177,7 @@ void crudObras() {
                               nombre);
       cout << "Obra modificada.\n";
     } else if (op == 4) {
+            // Agregar edición
       unsigned int idObra, idEditorial, numEdicion;
       string fecha, ciudad;
       leerUInt("ID Obra: ", idObra);
@@ -186,6 +198,7 @@ void crudObras() {
                                              idEditorial);
       cout << "Edicion agregada.\n";
     } else if (op == 5) {
+            // Eliminar edición
       unsigned int idObra, numEdicion;
       leerUInt("ID Obra: ", idObra);
       leerUInt("Numero de edicion a eliminar: ", numEdicion);
@@ -194,7 +207,9 @@ void crudObras() {
     }
   } while (op != 6);
 }
-
+// Función para mostrar diversas consultas estadísticas e informativas
+  // Incluye opciones para: contar obras por autor, listar tipos de obras,
+  // listar autores por editorial, y mostrar estadísticas por género o formación
 void mostrarconsultas() {
   int op;
   unsigned int id;
@@ -332,6 +347,7 @@ void menuMostrar() {
 }
 
 int main() {
+    // Cargar datos desde archivos
   cargarAutores(ctrlAutores, "autores.txt");
   cargarEditoriales(ctrlEditoriales, "editoriales.txt");
   cargarObras(ctrlObras, ctrlAutores, "obras.txt");
@@ -339,6 +355,7 @@ int main() {
 
   int op;
   do {
+        // Menú principal para CRUD y visualización
     cout << "\n==== MENU PRINCIPAL ====\n";
     cout << "1. Obras\n2. Autores\n3. Editoriales\n4. Mostrar\n5. "
             "Salir\nOpcion: ";
@@ -364,7 +381,7 @@ int main() {
         cout << "Opcion invalida.\n";
     }
   } while (op != 5);
-
+  // Guardar los datos actualizados en archivos
   guardarAutores(ctrlAutores, "autores.txt");
   guardarEditoriales(ctrlEditoriales, "editoriales.txt");
   guardarObras(ctrlObras, "obras.txt");
