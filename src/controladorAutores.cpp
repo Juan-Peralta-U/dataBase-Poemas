@@ -112,7 +112,7 @@ void ControladorAutores::mostrarAutoresEditorial(Lista<unsigned int>* IDAUTOR) {
   while (auxRes != NULL) {
     datosAutor* autor = auxRes->dato1;
     auxRes = auxRes->sig;
-    if (IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
+    if (!IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
     cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre << " "
          << autor->Apellido
          << " | Ciudad residencia: " << autor->ciudadResidencia << endl;
@@ -123,7 +123,7 @@ void ControladorAutores::mostrarAutoresEditorial(Lista<unsigned int>* IDAUTOR) {
   while (auxAnioI != NULL) {
     datosAutor* autor = auxAnioI->dato1;
     auxAnioI = auxAnioI->sig;
-    if (IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
+    if (!IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
     cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre << " "
          << autor->Apellido << " | Año inicio: " << autor->añoIncio << endl;
   }

@@ -45,7 +45,7 @@ class ControladorAutores {
       datosAutor* autor = auxRes->dato1;
       auxRes = auxRes->sig;
 
-      if (IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
+      if (!IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
 
       std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
                 << " " << autor->Apellido
