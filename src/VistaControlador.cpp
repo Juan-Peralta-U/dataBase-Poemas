@@ -1,8 +1,15 @@
-#include <iostream>
-#include <string>
+#include <iostream> // Entrada y salida estándar
+#include <string> // Uso de cadenas
 using namespace std;
 
-// --- Funciones del menú ---
+// --------------------------------------------------
+// FUNCIÓN: mostrarMenu
+// Muestra en pantalla un menú con un título y opciones numeradas.
+// Parámetros:
+//  - titulo: título del menú
+//  - opciones: arreglo con las opciones del menú
+//  - numOpciones: cantidad de opciones en el menú
+// --------------------------------------------------
 void mostrarMenu(const string& titulo, const string opciones[], int numOpciones) {
     string linea = "----------------------------------------------------------------";
     cout << linea << endl;
@@ -13,7 +20,13 @@ void mostrarMenu(const string& titulo, const string opciones[], int numOpciones)
         cout << i + 1 << ". " << opciones[i] << endl;
     }
 }
-
+// --------------------------------------------------
+// FUNCIÓN: ejecutarAccion
+// Ejecuta la acción correspondiente según el menú y la opción seleccionada.
+// Parámetros:
+//  - menu: ID del menú (1=obras, 2=ediciones, 3=autores, 4=editoriales, 5=consultas)
+//  - opcion: opción seleccionada dentro del menú
+// --------------------------------------------------
 void ejecutarAccion(int menu, int opcion) {
     switch (menu) {
         case 1: //Obras
@@ -131,7 +144,15 @@ switch (opcion) {
             cout << "Menu no valido." << endl;
     }
 }
-
+// --------------------------------------------------
+// FUNCIÓN: gestionarMenu
+// Muestra un menú, captura la opción seleccionada y la ejecuta.
+// Parámetros:
+//  - titulo: título del menú
+//  - opciones: arreglo de opciones
+//  - numOpciones: número total de opciones
+//  - menuId: ID que identifica a qué menú pertenece
+// --------------------------------------------------
 void gestionarMenu(const string& titulo, const string opciones[], int numOpciones, int menuId) {
     int opcion;
     mostrarMenu(titulo, opciones, numOpciones);
@@ -144,7 +165,11 @@ void gestionarMenu(const string& titulo, const string opciones[], int numOpcione
     }
 }
 
-// --- Función que controla todo el menú ---
+// --------------------------------------------------
+// FUNCIÓN PRINCIPAL DE VISTA
+// Controla toda la interacción con el usuario a través del menú principal.
+// --------------------------------------------------
+
 void ejecutarVista() {
     string opcionesObras[] = {
         "Agregar una nueva obra",
