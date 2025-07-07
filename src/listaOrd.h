@@ -3,39 +3,42 @@
 #define LISTAORD_H
 
 #include <iostream>
+// Definición de estructura nodoOrd para lista ordenada.
+// T: tipo de dato almacenado. S: tipo de la clave usada para ordenar.
 template <typename T, typename S>
 struct nodoOrd {
-  T dato1;
-  nodoOrd<T, S>* sig;
-
-  S clave;
+  T dato1; // Dato principal a almacenar
+  nodoOrd<T, S>* sig;  // Puntero al siguiente nodo
+  S clave; // Clave usada para mantener orden en la lista
 };
-
+// Clase ListaOrd: lista enlazada ordenada por clave.
+// Permite insertar, buscar y borrar elementos manteniendo orden ascendente.
 template <class T, typename S>
-
 class ListaOrd {
-  int numElem;
-  nodoOrd<T, S>* cab;
-
+  int numElem; // Número total de elementos en la lista
+  nodoOrd<T, S>* cab; // Puntero al primer nodo (cabeza)
+ // Constructor: inicializa lista vacía
  public:
   ListaOrd() {
     numElem = 0;
     cab = nullptr;
   }
-
+ // Verifica si la lista está vacía
   bool listaVacia() { return (cab == nullptr); }
-
+// Inserta un elemento manteniendo el orden por clave
   void insertarClave(T info1, S clave);
-
+// Borra un elemento con la clave y el dato de referencia
   bool borrarClave(S clave, T reference);
-  nodoOrd<T, S>* buscarClave(S clave);
-  nodoOrd<T, S>* buscarPos(int pos);
-  bool modificarPos(T info1, int pos);
-  void vaciarLista();
+// Busca y devuelve el nodo con la clave exacta
+  nodoOrd<T, S>* buscarClave(S clave); 
+  nodoOrd<T, S>* buscarPos(int pos); // Busca y devuelve el nodo en la posición `pos` (0-indexado)
+  bool modificarPos(T info1, int pos);   // Modifica el contenido del nodo en la posición indicada
 
+  void vaciarLista();  // Elimina todos los nodos de la lista
+// Destructor: libera toda la memoria de la lista
   ~ListaOrd() { vaciarLista(); };
 };
-
+// Implementación: insertar elemento en la lista manteniendo orden
 template <class T, typename S>
 void ListaOrd<T, S>::insertarClave(T info1, S clave) {
   nodoOrd<T, S>* nuevo = new nodoOrd<T, S>;
@@ -70,7 +73,7 @@ void ListaOrd<T, S>::insertarClave(T info1, S clave) {
   actual->sig = nuevo;
   numElem++;
 }
-
+// Implementación: borrar nodo con clave y valor específicos
 template <class T, typename S>
 bool ListaOrd<T, S>::borrarClave(S clave, T reference) {
   if (listaVacia()) return false;
@@ -78,7 +81,7 @@ bool ListaOrd<T, S>::borrarClave(S clave, T reference) {
   nodoOrd<T, S>* actual = cab;
   nodoOrd<T, S>* anterior = nullptr;
 
-  // Buscar nodo con clave igual o mayor (aprovecha orden)
+  // Buscar nodo con clave igual o mayor 
   while (actual != nullptr && actual->clave < clave &&
          actual->dato1 != reference) {
     anterior = actual;
@@ -103,6 +106,7 @@ bool ListaOrd<T, S>::borrarClave(S clave, T reference) {
   numElem--;
   return true;
 }
+// Implementación: buscar nodo por clave
 
 template <class T, typename S>
 nodoOrd<T, S>* ListaOrd<T, S>::buscarClave(S clave) {
@@ -121,7 +125,7 @@ nodoOrd<T, S>* ListaOrd<T, S>::buscarClave(S clave) {
   // Clave no encontrada
   return nullptr;
 }
-
+// Implementación: eliminar todos los nodos de la lista
 template <class T, typename S>
 void ListaOrd<T, S>::vaciarLista() {
   nodoOrd<T, S>* aux1 = cab;
@@ -134,7 +138,7 @@ void ListaOrd<T, S>::vaciarLista() {
   cab = nullptr;
   numElem = 0;
 }
-
+// Implementación: buscar nodo por posición (0-based)
 template <class T, typename S>
 nodoOrd<T, S>* ListaOrd<T, S>::buscarPos(int pos) {
   if (pos < 0 || pos > numElem) {
