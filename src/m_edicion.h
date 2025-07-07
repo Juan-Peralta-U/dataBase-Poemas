@@ -9,8 +9,9 @@ Datos de la edición
     • Ciudad de publicación.
 */
 
+// Definición de la estructura datosEdiccion
 struct datosEdiccion {
-  unsigned int IDEDITORIAL;
+  unsigned int IDEDITORIAL; // Identificador único de la editorial que publica esta edición
   unsigned int numeroEdicion;
   std::string fechaDePublicacion, ciudadDePublicacion;
 };
