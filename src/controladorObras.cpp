@@ -4,20 +4,26 @@
 #include <string>
 
 using namespace std;
-
+// Agrega una nueva obra poética al sistema
 void ControladorObras::agregarObra(unsigned int IDOBRA, unsigned int IDAUTOR,
                                    tipoObra obraTipo,
                                    const std::string& nombre) {
+    // Crea el objeto obra
   ObraPoetica* nueva = new ObraPoetica{IDAUTOR, obraTipo, nombre};
+    // Inserta en las listas ordenadas por tipo y por autor
   listaPorTipoPoesia.insertarClave(nueva, obraTipo);
   listaPorIDAutor.insertarClave(nueva, IDAUTOR);
+    // Inserta en el árbol por ID de obra
   arbolObra.add(IDOBRA, nueva);
 }
-
+// Elimina una obra del sistema
 void ControladorObras::eliminarObra(unsigned int IDOBRA) {
+    // Se obtiene la obra a eliminar
   ObraPoetica* del = arbolObra.getNodeKey(IDOBRA)->data;
+    // Se elimina de las listas ordenadas
   listaPorTipoPoesia.borrarClave(del->obra, del);
   listaPorIDAutor.borrarClave(del->IDAUTOR, del);
+    // Se eliminan sus ediciones de otras listas
   int tam = del->ediciones.getTam();
   for (int i = 0; i < tam; ++i) {
     const datosEdiccion& ed = del->ediciones.get(i);
@@ -27,10 +33,11 @@ void ControladorObras::eliminarObra(unsigned int IDOBRA) {
       listaPorAnioPublicacion.borrarClave(anio, del);
     }
   }
+    // Se elimina del árbol y se libera memoria
   arbolObra.deleteKey(IDOBRA);
   delete del;
 }
-
+// Modifica una obra existente en el sistema
 void ControladorObras::modificarObra(unsigned int IDOBRA,
                                      unsigned int nuevoIDAUTOR,
                                      tipoObra nuevoTipo,
@@ -41,35 +48,37 @@ void ControladorObras::modificarObra(unsigned int IDOBRA,
     aux->obra = nuevoTipo;
     listaPorTipoPoesia.insertarClave(aux, aux->obra);
   }
+    // Si cambia el tipo, actualiza la lista ordenada
   if (aux->IDAUTOR != nuevoIDAUTOR) {
     listaPorIDAutor.borrarClave(aux->IDAUTOR, aux);
     aux->IDAUTOR = nuevoIDAUTOR;
     listaPorIDAutor.insertarClave(aux, aux->IDAUTOR);
   }
+    // Actualiza el nombre
   aux->nombre = nuevoNombre;
 }
-
+// Busca una obra por ID y retorna puntero constante
 ObraPoetica const* ControladorObras::buscarObra(unsigned int IDOBRA) {
   return arbolObra.getNodeKey(IDOBRA)->data;
 }
-
+// Agrega una edición a una obra existente
 void ControladorObras::agregarEdicionAObra(unsigned int IDOBRA,
                                            const datosEdiccion& edicion) {
   ObraPoetica* obra = arbolObra.getNodeKey(IDOBRA)->data;
   obra->ediciones.insertarFinal(edicion);
-
+  // Si la obra ya fue marcada como con ediciones, no se vuelve a agregar
   if (obrasConEdiciones.getNodeKey(IDOBRA)->data) return;
 
   obrasConEdiciones.add(IDOBRA, 1);
 
   listaPorIDEditorial.insertarClave(obra, edicion.IDEDITORIAL);
-
+  // Indexa por año si hay fecha válida
   if (edicion.fechaDePublicacion.size() >= 4) {
     int anio = stoi(edicion.fechaDePublicacion);
     listaPorAnioPublicacion.insertarClave(obra, anio);
   }
 }
-
+// Elimina una edición específica de una obra
 void ControladorObras::eliminarEdicionDeObra(unsigned int IDOBRA,
                                              unsigned int numEdicion) {
   ObraPoetica* obra = arbolObra.getNodeKey(IDOBRA)->data;
@@ -82,12 +91,13 @@ void ControladorObras::eliminarEdicionDeObra(unsigned int IDOBRA,
         int anio = stoi(obra->ediciones.get(i).fechaDePublicacion.substr(6, 4));
         listaPorAnioPublicacion.borrarClave(anio, obra);
       }
+            // Se elimina la edición de la lista de la obra
       obra->ediciones.borrarPos(i);
       break;
     }
   }
 }
-
+// Muestra todas las obras registradas
 void ControladorObras::mostrarObras() {
   cout << "\n--- LISTA DE OBRAS ---\n";
   pila<ObraPoetica*> obras = arbolObra.inorden();
@@ -97,7 +107,7 @@ void ControladorObras::mostrarObras() {
          << " | Tipo: " << obra->obra << endl;
   }
 }
-
+// Muestra todas las ediciones registradas de todas las obras
 void ControladorObras::mostrarTodasEdiciones() {
   cout << "\n--- TODAS LAS EDICIONES ---\n";
   pila<ObraPoetica*> obras = arbolObra.inorden();
@@ -114,7 +124,7 @@ void ControladorObras::mostrarTodasEdiciones() {
     }
   }
 }
-
+// Muestra las obras de un autor organizadas por año de publicación y editorial
 void ControladorObras::mostrarObrasPorAutor(unsigned int IDAUTOR) {
   cout << "\n--- LISTA DE OBRAS POR AÑO ---\n";
   nodoOrd<ObraPoetica*, int>* auxAnio = listaPorAnioPublicacion.buscarPos(0);
@@ -145,7 +155,7 @@ void ControladorObras::mostrarObrasPorAutor(unsigned int IDAUTOR) {
          << endl;
   }
 }
-
+// Muestra todas las obras de un autor filtradas por tipo de poesía
 void ControladorObras::mostrarTiposObraPorAutor(unsigned int IDAUTOR) {
   cout << "\n--- LISTA DE OBRAS POR AÑO ---\n";
   nodoOrd<ObraPoetica*, tipoObra>* auxTipo = listaPorTipoPoesia.buscarPos(0);
@@ -168,9 +178,9 @@ void ControladorObras::mostrarTiposObraPorAutor(unsigned int IDAUTOR) {
     }
   }
 }
-
+// Retorna una pila con todas las obras registradas (orden inorden)
 pila<ObraPoetica*> ControladorObras::getObras() { return arbolObra.inorden(); }
-
+// Retorna una pila con todas las ediciones registradas en el sistema
 pila<datosEdiccion> ControladorObras::getEdiciones() {
   pila<datosEdiccion> ediciones;
   pila<ObraPoetica*> obras = arbolObra.inorden();
@@ -183,9 +193,9 @@ pila<datosEdiccion> ControladorObras::getEdiciones() {
   }
   return ediciones;
 }
-
+// Retorna una pila con las claves (ID) de todas las obras
 pila<int> ControladorObras::getClavesObras() { return arbolObra.inordenKeys(); }
-
+// Muestra todas las obras de un autor filtradas por un tipo de poesía específico
 void ControladorObras::mostrarTiposObraPorAutorYTipo(unsigned int IDAUTOR,
                                                      tipoObra tipo) {
   cout << "\n--- TODAS LAS EDICIONES ---\n";
@@ -204,7 +214,7 @@ void ControladorObras::mostrarTiposObraPorAutorYTipo(unsigned int IDAUTOR,
     }
   }
 }
-
+// Retorna el ID del autor a partir del ID de obra
 unsigned int ControladorObras::mostarIDAUTOR(unsigned int IDOBRA) {
   return buscarObra(IDOBRA)->IDAUTOR;
 }
