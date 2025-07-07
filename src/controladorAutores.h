@@ -35,6 +35,7 @@ class ControladorAutores {
   void mostrarAutor(unsigned int IDAUTOR);
   void mostrarAutoresEditorial(Lista<unsigned int>* IDAUTOR);
   void mostrarAutoresPorRangoyFormacion(int rangoEdad[2], Formacion formacion);
+
   void mostrarAutoresPorCiudadResidencia(Lista<unsigned int>* IDAUTOR) {
     cout << "\n--- LISTA DE AUTORES POR Ciudad de nacimiento ---\n";
 

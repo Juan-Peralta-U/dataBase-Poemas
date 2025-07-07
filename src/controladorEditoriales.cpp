@@ -88,16 +88,16 @@ void ControladorEditoriales::mostarNumeroDeAutores(int cantidad) {
   pila<datosEditorial*> editoriales = arbolEditorial.inorden();
   while (!editoriales.PilaVacia()) {
     datosEditorial* ed = editoriales.Pop();
-    auto autoresNode = autoresPublicados.getNodeKey(ed->IDEDITORIAL);
-    if (!autoresNode) continue;
+    auto autoresNode = autoresPublicados.getNodeKey(ed->IDEDITORIAL)->data;
+    if (autoresNode == nullptr) continue;
 
-    int tam = autoresNode->data->getTam();
-    if (tam < cantidad) continue;
+    int tamaño = autoresNode->getTam();
+    if (tamaño < cantidad) continue;
 
     cout << "ID: " << ed->IDEDITORIAL << " | Nombre: " << ed->nombreEditorial
-         << " | Cantidad de autores: " << tam
+         << " | Cantidad de autores: " << tamaño
          << " | Ciudad: " << ed->ciudadOficina << " | Pais: " << ed->paisOficina
-         << endl;
+         << " | DIRECCION HX: " << autoresNode << endl;
   }
 }
 
@@ -111,8 +111,8 @@ void ControladorEditoriales::insertarAutorPublicado(unsigned int IDAUTOR,
   RBNode<Lista<unsigned int>*>* autoresNode =
       autoresPublicados.getNodeKey(IDEDITORIAL);
 
-  // Si el nodo no existe, crear una nueva lista y agregar la editorial
-  if (autoresNode == nullptr) {
+  // Si el nodo existe pero su data es nullptr, inicializar la lista
+  if (autoresNode->data == nullptr) {
     Lista<unsigned int>* nuevaLista = new Lista<unsigned int>();
     autoresPublicados.add(IDEDITORIAL, nuevaLista);
     nuevaLista->insertarInicio(
@@ -120,13 +120,13 @@ void ControladorEditoriales::insertarAutorPublicado(unsigned int IDAUTOR,
     return;        // Salir después de insertar
   }
 
-  // Si el nodo existe pero su data es nullptr, inicializar la lista
-  if (autoresNode->data == nullptr) {
-    autoresNode->data = new Lista<unsigned int>();
-  }
-
   // Insertar el autor en la lista existente
+  if (autoresNode->data->tieneValor(IDAUTOR)) return;
+
   autoresNode->data->insertarInicio(IDAUTOR);
+  // cerr << "--------------------------------------------------\n";
+  // cerr << IDEDITORIAL << '\n';
+  // cerr << autoresNode->data->getTam() << '\n';
 }
 
 Lista<unsigned int>* ControladorEditoriales::autoresPublicadosPorEditorial(

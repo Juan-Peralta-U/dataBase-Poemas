@@ -231,13 +231,7 @@ void mostrarconsultas() {
       case 4:
         leerUInt("Catidad de Autores: ", id);
 
-        if (ctrlEditoriales.autoresPublicadosPorEditorial(id) == nullptr) {
-          cerr << "Editorial no existe\n";
-          break;
-        }
-
         ctrlEditoriales.mostarNumeroDeAutores(id);
-
         break;
       case 5: {
         pila<datosEditorial*> editoriales = ctrlEditoriales.getEditoriales();
