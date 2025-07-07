@@ -9,7 +9,9 @@
 #include "m_obrapoetica.h"
 
 using namespace std;
-// Función que carga los autores desde un archivo CSV
+
+
+// IDAUTOR,nombre,Apellido,sexo,fechaNacimiento_dia,fechaNacimiento_mes,fechaNacimiento_año,cidudadNacimiento,paisNacimiento,ciudadResidencia,formacion,añoIncio,añoPublicacion
 void cargarAutores(ControladorAutores& ctrlAutores,
                    const string& nombreArchivo) {
   ifstream archivo(nombreArchivo);  // Abrimos archivo para lectura
@@ -54,7 +56,8 @@ void cargarAutores(ControladorAutores& ctrlAutores,
   archivo.close();
   cout << "Autores cargados correctamente.\n";
 }
-// Función que carga obras desde archivo CSV
+
+// IDEDITORIAL,nombreEditorial,ciudadOficina,paisOficina
 void cargarObras(ControladorObras& ctrlObras, ControladorAutores& ctrlAutores,
                  const string& nombreArchivo) {
   ifstream archivo(nombreArchivo);
@@ -81,7 +84,8 @@ void cargarObras(ControladorObras& ctrlObras, ControladorAutores& ctrlAutores,
   archivo.close();
   cout << "Obras cargadas correctamente.\n";
 }
-// Cargar datos de las editoriales desde un archivo CSV
+
+// IDEDITORIAL,nombreEditorial,ciudadOficina,paisOficina
 void cargarEditoriales(ControladorEditoriales& ctrlEditoriales,
                        const string& nombreArchivo) {
   ifstream archivo(nombreArchivo);
@@ -106,7 +110,8 @@ void cargarEditoriales(ControladorEditoriales& ctrlEditoriales,
   archivo.close();
   cout << "Editoriales cargadas correctamente.\n";
 }
-// Cargar ediciones de las obras desde un archivo CSV
+
+// IDOBRA,IDEDITORIAL,numEdicion,fechaPublicacion,ciudadPublicacion
 void cargarEdiciones(ControladorObras& ctrlObras,
                      ControladorEditoriales& ctrlEditoriales,
                      const string& nombreArchivo) {
