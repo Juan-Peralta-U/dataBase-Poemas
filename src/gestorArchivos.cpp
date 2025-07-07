@@ -1,9 +1,8 @@
 #include "gestorArchivos.h"
-
-#include <fstream>
-#include <iostream>
-#include <sstream>
-
+#include <fstream>   // Para manejo de archivos
+#include <iostream>  // Para impresión de mensajes
+#include <sstream>   // Para dividir cadenas leídas del archivo
+// Modelos necesarios para interpretar los datos leídos y acceder a sus campos
 #include "m_Editorial.h"
 #include "m_datosAutor.h"
 #include "m_edicion.h"
@@ -15,18 +14,18 @@ using namespace std;
 // IDAUTOR,nombre,Apellido,sexo,fechaNacimiento_dia,fechaNacimiento_mes,fechaNacimiento_año,cidudadNacimiento,paisNacimiento,ciudadResidencia,formacion,añoIncio,añoPublicacion
 void cargarAutores(ControladorAutores& ctrlAutores,
                    const string& nombreArchivo) {
-  ifstream archivo(nombreArchivo);
+  ifstream archivo(nombreArchivo);  // Abrimos archivo para lectura
   if (!archivo.is_open()) {
     cout << "Error al abrir el archivo de autores.\n";
     return;
   }
 
   string linea;
-  while (getline(archivo, linea)) {
-    istringstream iss(linea);
+  while (getline(archivo, linea)) { // Leer línea por línea 
+    istringstream iss(linea); // Convertir la línea a flujo
     datosAutor* autor = new datosAutor;
     string campo;
-
+// Extraer cada campo separado por comas
     getline(iss, campo, ',');
     autor->IDAUTOR = stoi(campo);
     getline(iss, autor->nombre, ',');
@@ -52,7 +51,7 @@ void cargarAutores(ControladorAutores& ctrlAutores,
     getline(iss, campo, ',');
     autor->añoPublicacion = stoi(campo);
 
-    ctrlAutores.agregarAutor(autor);
+    ctrlAutores.agregarAutor(autor); // Se agrega al sistema
   }
   archivo.close();
   cout << "Autores cargados correctamente.\n";
@@ -72,7 +71,7 @@ void cargarObras(ControladorObras& ctrlObras, ControladorAutores& ctrlAutores,
     unsigned int idObra, idAutor;
     string nombre, campo;
     int tipo;
-
+    // Leer los campos en orden
     getline(iss, campo, ',');
     idObra = stoi(campo);
     getline(iss, campo, ',');
@@ -135,7 +134,7 @@ void cargarEdiciones(ControladorObras& ctrlObras,
     numEdicion = stoi(campo);
     getline(iss, fechaPublicacion, ',');
     getline(iss, ciudadPublicacion, ',');
-
+    // Crear la estructura de edición
     datosEdiccion ed{idEditorial, numEdicion, fechaPublicacion,
                      ciudadPublicacion};
     ctrlObras.agregarEdicionAObra(idObra, ed);
@@ -145,7 +144,7 @@ void cargarEdiciones(ControladorObras& ctrlObras,
   archivo.close();
   cout << "Ediciones cargadas correctamente.\n";
 }
-
+// Guardar todos los autores del sistema en un archivo CSV
 void guardarAutores(ControladorAutores& ctrlAutores,
                     const string& nombreArchivo) {
   ofstream archivo(nombreArchivo);
@@ -167,7 +166,7 @@ void guardarAutores(ControladorAutores& ctrlAutores,
   archivo.close();
   cout << "Autores guardados correctamente.\n";
 }
-
+// Guardar las editoriales en archivo
 void guardarEditoriales(ControladorEditoriales& ctrlEditoriales,
                         const string& nombreArchivo) {
   ofstream archivo(nombreArchivo);
@@ -185,7 +184,7 @@ void guardarEditoriales(ControladorEditoriales& ctrlEditoriales,
   archivo.close();
   cout << "Editoriales guardadas correctamente.\n";
 }
-
+// Guardar todas las ediciones existentes en archivo CSV
 void guardarEdiciones(ControladorObras& ctrlObras,
                       const string& nombreArchivo) {
   ofstream archivo(nombreArchivo);
@@ -210,7 +209,7 @@ void guardarEdiciones(ControladorObras& ctrlObras,
   archivo.close();
   cout << "Ediciones guardadas correctamente.\n";
 }
-
+// Guardar las obras registradas
 void guardarObras(ControladorObras& ctrlObras, const string& nombreArchivo) {
   ofstream archivo(nombreArchivo);
   if (!archivo.is_open()) {

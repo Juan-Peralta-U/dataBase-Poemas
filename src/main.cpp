@@ -1,6 +1,7 @@
+// Librerías estándar
 #include <iostream>
 #include <string>
-
+// Controladores y modelos del proyecto
 #include "controladorAutores.h"
 #include "controladorEditoriales.h"
 #include "controladorObras.h"
@@ -12,6 +13,7 @@
 
 using namespace std;
 
+// Instancias globales de los controladores
 ControladorObras ctrlObras;
 ControladorAutores ctrlAutores;
 ControladorEditoriales ctrlEditoriales;
@@ -43,6 +45,7 @@ void crudAutores() {
     cout << "\n1. Ingresar\n2. Eliminar\n3. Modificar\n4. Volver\n"<<linea1<<"\nOpcion: ";
     cin >> op;
     cin.ignore();
+    // Crear nuevo autor
     if (op == 1) {
       datosAutor* a = new datosAutor;
       leerUInt("ID: ", a->IDAUTOR);
@@ -67,6 +70,7 @@ void crudAutores() {
       ctrlAutores.agregarAutor(a);
       cout << "Autor agregado.\n";
     } else if (op == 2) {
+      // Eliminar autor
       unsigned int id;
       leerUInt("ID a eliminar: ", id);
       if(ctrlAutores.buscarAutor(id) == nullptr) {
@@ -76,6 +80,7 @@ void crudAutores() {
       ctrlAutores.eliminarAutor(id);
       cout << "Autor eliminado.\n";
     } else if (op == 3) {
+      // Modificar autor
       unsigned int id;
       leerUInt("ID a modificar: ", id);
       if(ctrlAutores.buscarAutor(id) == nullptr) {
@@ -115,6 +120,7 @@ void crudEditoriales() {
     cin >> op;
     cin.ignore();
     if (op == 1) {
+            // Crear nueva editorial
       datosEditorial* e = new datosEditorial;
       leerUInt("ID: ", e->IDEDITORIAL);
       // Verificar si el ID de la editorial ya existe
@@ -129,6 +135,7 @@ void crudEditoriales() {
       ctrlEditoriales.agregarEditorial(e);
       cout << "Editorial agregada.\n";
     } else if (op == 2) {
+            // Eliminar editorial
       unsigned int id;
       leerUInt("ID a eliminar: ", id);
       // Verificar si la editorial existe antes de eliminarla
@@ -139,6 +146,7 @@ void crudEditoriales() {
       ctrlEditoriales.eliminarEditorial(id);
       cout << "Editorial eliminada.\n";
     } else if (op == 3) {
+            // Modificar editorial
       unsigned int id;
       leerUInt("ID a modificar: ", id);
       // Verificar si la editorial existe antes de modificarla
@@ -166,6 +174,7 @@ void crudObras() {
     cin >> op;
     cin.ignore();
     if (op == 1) {
+            // Agregar nueva obra
       unsigned int idObra, idAutor;
       string nombre;
       int tipo;
@@ -188,6 +197,7 @@ void crudObras() {
                             nombre);
       cout << "Obra agregada.\n";
     } else if (op == 2) {
+            // Eliminar obra
       unsigned int idObra;
       leerUInt("ID a eliminar: ", idObra);
       // Verificar si la obra existe antes de eliminarla
@@ -198,6 +208,7 @@ void crudObras() {
       ctrlObras.eliminarObra(idObra);
       cout << "Obra eliminada.\n";
     } else if (op == 3) {
+            // Modificar obra
       unsigned int idObra, idAutor;
       string nombre;
       int tipo;
@@ -218,6 +229,7 @@ void crudObras() {
                               nombre);
       cout << "Obra modificada.\n";
     } else if (op == 4) {
+            // Agregar edición
       unsigned int idObra, idEditorial, numEdicion;
       string fecha, ciudad;
       leerUInt("ID Obra: ", idObra);
@@ -243,6 +255,7 @@ void crudObras() {
                                              idEditorial);
       cout << "Edicion agregada.\n";
     } else if (op == 5) {
+            // Eliminar edición
       unsigned int idObra, numEdicion;
       leerUInt("ID Obra: ", idObra);
       // Verificar si la obra existe antes de eliminar la edición
@@ -256,7 +269,9 @@ void crudObras() {
     }
   } while (op != 6);
 }
-
+// Función para mostrar diversas consultas estadísticas e informativas
+  // Incluye opciones para: contar obras por autor, listar tipos de obras,
+  // listar autores por editorial, y mostrar estadísticas por género o formación
 void mostrarconsultas() {
   int op;
   unsigned int id;
@@ -410,6 +425,7 @@ void menuMostrar() {
 }
 
 int main() {
+    // Cargar datos desde archivos
   cargarAutores(ctrlAutores, "autores.txt");
   cargarEditoriales(ctrlEditoriales, "editoriales.txt");
   cargarObras(ctrlObras, ctrlAutores, "obras.txt");
@@ -442,7 +458,7 @@ int main() {
         cout << "Opcion invalida.\n";
     }
   } while (op != 5);
-
+  // Guardar los datos actualizados en archivos
   guardarAutores(ctrlAutores, "autores.txt");
   guardarEditoriales(ctrlEditoriales, "editoriales.txt");
   guardarObras(ctrlObras, "obras.txt");

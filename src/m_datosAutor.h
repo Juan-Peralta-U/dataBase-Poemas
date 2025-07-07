@@ -1,5 +1,10 @@
 #pragma once
 #include <string>
+/*
+ * Estructura: datosAutor
+ * Contiene todos los campos relevantes para describir a un autor.
+ * Los campos están especificados en el comentario con viñetas.
+ */
 
 /*
 Datos del autor.
@@ -17,6 +22,11 @@ Datos del autor.
 de publicación de su primera obra
 */
 
+// --------------------------
+// Enumeración Formacion
+// --------------------------
+// Representa la formación académica o profesional del autor.
+// Se asignan valores enteros a cada opción para facilitar almacenamiento.
 enum Formacion {
   literatura = 0,
   artes = 1,
@@ -26,14 +36,18 @@ enum Formacion {
   jurisprudencia = 5,
   otros = 6
 };
-
+// --------------------------
+// Estructura datosAutor
+// --------------------------
+// Agrupa todos los datos relevantes de un autor en un solo objeto.
 struct datosAutor {
-  unsigned int IDAUTOR;
-  bool sexo;
+  unsigned int IDAUTOR; // Identificador único del autor
+  bool sexo; // Sexo del autor (0 = Femenino, 1 = Masculino)
   int añoIncio, añoPublicacion;
   int fechaNacimiento[3];  // tres ints para dia/mes/año facilita calculos
                            // espero
-  Formacion formacion;
+  Formacion formacion; // Formación académica/profesional del autor
+ // Información personal y geográfica
   std::string nombre, Apellido, cidudadNacimiento, paisNacimiento,
       ciudadResidencia;
 };

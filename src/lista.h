@@ -2,39 +2,46 @@
 #define LISTA_H
 
 #include <iostream>
+
+// --------------------------
+// Definición del nodo genérico
+// --------------------------
 template <class T>
 struct nodo {
-  T dato1;
-  nodo<T>* sig;
+  T dato1; // Dato principal almacenado en el nodo
+  nodo<T>* sig;// Puntero al siguiente nodo
 };
-
+// --------------------------
+// Clase Lista (lista enlazada simple genérica)
+// --------------------------
 template <class T>
 class Lista {
-  int numElem;
-  nodo<T>* cab;
+  int numElem; // Cantidad de elementos actuales en la lista
+  nodo<T>* cab; // Puntero al primer nodo de la lista
 
  public:
+  // Constructor: crea una lista vacía
   Lista() {
     numElem = 0;
     cab = nullptr;
   }
-
+// Verifica si la lista está vacía
   bool listaVacia() { return (cab == nullptr); }
+ // Métodos para insertar elementos
+  void insertarInicio(T info1); // Inserta al inicio
+  void insertarFinal(T info1); // Inserta al final
+  void insertarPos(T info1, int pos); // Inserta en una posición específica
+// Métodos para eliminar, buscar y modificar elementos 
+  bool borrarPos(int pos); // Borra un nodo en la posición dada
+  nodo<T>* buscarPos(int pos); // Retorna el nodo en la posición dada
+  bool modificarPos(T info1, int pos); // Modifica el nodo en la posición dada
+  void vaciarLista(); // Elimina todos los nodos
 
-  void insertarInicio(T info1);
-  void insertarFinal(T info1);
-  void insertarPos(T info1, int pos);
+  bool tieneValor(T value); // Verifica si un valor existe en la lista
 
-  bool borrarPos(int pos);
-  nodo<T>* buscarPos(int pos);
-  bool modificarPos(T info1, int pos);
-  void vaciarLista();
+  void imprimirLista(); // Imprime todos los elementos (con error en implementación)
 
-  bool tieneValor(T value);
-
-  void imprimirLista();
-
-  int getTam() const { return numElem; }
+  int getTam() const { return numElem; } // Devuelve la cantidad de elementos
 
   // Devuelve el dato en la posición pos (0-based)
   T get(int pos) const {
@@ -43,9 +50,14 @@ class Lista {
     if (aux) return aux->dato1;
     throw std::out_of_range("Posición fuera de rango en get()");
   }
-
+  // Destructor: libera toda la memoria utilizada
   ~Lista() { vaciarLista(); };
 };
+// --------------------------
+// Implementación de métodos
+// --------------------------
+
+// Inserta un nuevo nodo al inicio de la lista
 template <typename T>
 void Lista<T>::insertarInicio(T info1) {
   nodo<T>* aux = new nodo<T>;
@@ -54,7 +66,7 @@ void Lista<T>::insertarInicio(T info1) {
   cab = aux;
   numElem++;
 }
-
+// Inserta un nuevo nodo al final de la lista
 template <class T>
 void Lista<T>::insertarFinal(T info1) {
   nodo<T>* aux = new nodo<T>;
@@ -70,7 +82,7 @@ void Lista<T>::insertarFinal(T info1) {
   }
   numElem++;
 }
-
+// Inserta un nuevo nodo en una posición específic
 template <class T>
 void Lista<T>::insertarPos(T info1, int pos) {
   if (pos == 0) {
@@ -99,7 +111,7 @@ void Lista<T>::insertarPos(T info1, int pos) {
 
   numElem++;
 }
-
+// Busca y retorna el nodo en la posición indicada
 template <class T>
 nodo<T>* Lista<T>::buscarPos(int pos) {
   if (pos < 0 || pos > numElem) {
@@ -114,7 +126,7 @@ nodo<T>* Lista<T>::buscarPos(int pos) {
 
   return aux;
 }
-
+// Borra el nodo ubicado en la posición dada
 template <class T>
 bool Lista<T>::borrarPos(int pos) {
   if (pos < 0 || pos >= numElem || listaVacia()) return false;
@@ -137,6 +149,7 @@ bool Lista<T>::borrarPos(int pos) {
   return true;
 }
 
+// Verifica si el valor existe en algún nodo de la lista
 template <class T>
 bool Lista<T>::tieneValor(T value) {
   nodo<T>* aux = cab;
@@ -146,7 +159,7 @@ bool Lista<T>::tieneValor(T value) {
   }
   return false;
 }
-
+// Modifica el contenido del nodo en la posición especificada
 template <class T>
 bool Lista<T>::modificarPos(T info1, int pos) {
   nodo<T>* aux = buscarPos(pos);
@@ -156,7 +169,7 @@ bool Lista<T>::modificarPos(T info1, int pos) {
   aux->dato1 = info1;
   return true;
 }
-
+// Elimina todos los nodos de la lista, liberando la memoria
 template <class T>
 void Lista<T>::vaciarLista() {
   nodo<T>* aux1 = cab;
@@ -169,7 +182,7 @@ void Lista<T>::vaciarLista() {
   cab = nullptr;
   numElem = 0;
 }
-
+// Imprime el contenido de la lista (nota: intenta imprimir dato2, que no existe en esta versión)
 template <class T>
 void Lista<T>::imprimirLista() {
   std::cerr << "[";

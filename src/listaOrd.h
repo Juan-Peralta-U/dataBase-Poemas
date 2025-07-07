@@ -3,41 +3,55 @@
 #define LISTAORD_H
 
 #include <iostream>
+
+// -----------------------------
+// Estructura nodo ordenado
+// -----------------------------
 template <typename T, typename S>
 struct nodoOrd {
-  T dato1;
-  nodoOrd<T, S>* sig;
-
-  S clave;
+  T dato1;                     // Dato principal almacenado en el nodo
+  nodoOrd<T, S>* sig;         // Puntero al siguiente nodo
+  S clave;                    // Clave que define el orden en la lista
 };
 
 template <class T, typename S>
-
+// -----------------------------
+// Clase ListaOrdenada
+// -----------------------------
 class ListaOrd {
-  int numElem;
-  nodoOrd<T, S>* cab;
+  int numElem;                // Número de elementos actuales
+  nodoOrd<T, S>* cab;         // Puntero al primer nodo (cabeza)
 
  public:
+  // Constructor: inicializa lista vacía
   ListaOrd() {
     numElem = 0;
     cab = nullptr;
   }
-
+  // Retorna el tamaño actual de la lista
   int getTam() { return numElem; }
-
+  // Verifica si la lista está vacía
   bool listaVacia() { return (cab == nullptr); }
-
+  // Inserta un elemento de forma ordenada por la clave
   void insertarClave(T info1, S clave);
-
+  // Borra el primer nodo que tenga la clave y cuyo dato coincida
   bool borrarClave(S clave, T reference);
+  // Busca y retorna el primer nodo con clave exacta
   nodoOrd<T, S>* buscarClave(S clave);
+  // Retorna el nodo en una posición específica
   nodoOrd<T, S>* buscarPos(int pos);
+  // Modifica el dato1 en la posición dada
   bool modificarPos(T info1, int pos);
+  // Elimina todos los nodos de la lista
   void vaciarLista();
-
+  // Destructor: limpia la memoria
   ~ListaOrd() { vaciarLista(); };
 };
+// --------------------------------------
+// Implementación de métodos
+// --------------------------------------
 
+// Inserta un nodo en orden creciente por clave
 template <class T, typename S>
 void ListaOrd<T, S>::insertarClave(T info1, S clave) {
   nodoOrd<T, S>* nuevo = new nodoOrd<T, S>;
@@ -72,7 +86,7 @@ void ListaOrd<T, S>::insertarClave(T info1, S clave) {
   actual->sig = nuevo;
   numElem++;
 }
-
+// Elimina el primer nodo que tenga la clave y el mismo puntero `reference`
 template <class T, typename S>
 bool ListaOrd<T, S>::borrarClave(S clave, T reference) {
   if (listaVacia()) return false;
@@ -105,7 +119,7 @@ bool ListaOrd<T, S>::borrarClave(S clave, T reference) {
   numElem--;
   return true;
 }
-
+// Busca el primer nodo cuya clave coincida exactamente
 template <class T, typename S>
 nodoOrd<T, S>* ListaOrd<T, S>::buscarClave(S clave) {
   nodoOrd<T, S>* actual = cab;
@@ -123,7 +137,7 @@ nodoOrd<T, S>* ListaOrd<T, S>::buscarClave(S clave) {
   // Clave no encontrada
   return nullptr;
 }
-
+// Borra todos los nodos y libera la memoria
 template <class T, typename S>
 void ListaOrd<T, S>::vaciarLista() {
   nodoOrd<T, S>* aux1 = cab;
@@ -136,7 +150,7 @@ void ListaOrd<T, S>::vaciarLista() {
   cab = nullptr;
   numElem = 0;
 }
-
+// Retorna el nodo en la posición dada (0-indexado)
 template <class T, typename S>
 nodoOrd<T, S>* ListaOrd<T, S>::buscarPos(int pos) {
   if (pos < 0 || pos > numElem) {
