@@ -35,6 +35,7 @@ class ControladorAutores {
   void mostrarAutor(unsigned int IDAUTOR);
   void mostrarAutoresEditorial(Lista<unsigned int>* IDAUTOR);
   void mostrarAutoresPorRangoyFormacion(int rangoEdad[2], Formacion formacion);
+
   void mostrarAutoresPorCiudadResidencia(Lista<unsigned int>* IDAUTOR) {
     cout << "\n--- LISTA DE AUTORES POR Ciudad de nacimiento ---\n";
 
@@ -44,7 +45,7 @@ class ControladorAutores {
       datosAutor* autor = auxRes->dato1;
       auxRes = auxRes->sig;
 
-      if (IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
+      if (!IDAUTOR->tieneValor(autor->IDAUTOR)) continue;
 
       std::cout << "ID: " << autor->IDAUTOR << " | Nombre: " << autor->nombre
                 << " " << autor->Apellido

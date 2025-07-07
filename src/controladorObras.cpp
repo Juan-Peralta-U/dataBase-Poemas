@@ -57,9 +57,15 @@ void ControladorObras::agregarEdicionAObra(unsigned int IDOBRA,
                                            const datosEdiccion& edicion) {
   ObraPoetica* obra = arbolObra.getNodeKey(IDOBRA)->data;
   obra->ediciones.insertarFinal(edicion);
+
+  if (obrasConEdiciones.getNodeKey(IDOBRA)->data) return;
+
+  obrasConEdiciones.add(IDOBRA, 1);
+
   listaPorIDEditorial.insertarClave(obra, edicion.IDEDITORIAL);
-  if (edicion.fechaDePublicacion.size() >= 10) {
-    int anio = stoi(edicion.fechaDePublicacion.substr(6, 4));
+
+  if (edicion.fechaDePublicacion.size() >= 4) {
+    int anio = stoi(edicion.fechaDePublicacion);
     listaPorAnioPublicacion.insertarClave(obra, anio);
   }
 }
@@ -115,6 +121,7 @@ void ControladorObras::mostrarObrasPorAutor(unsigned int IDAUTOR) {
   while (auxAnio != NULL) {
     ObraPoetica* obra = auxAnio->dato1;
     auxAnio = auxAnio->sig;
+
     if (obra->IDAUTOR != IDAUTOR) continue;
     cout << "Autor: " << obra->IDAUTOR << " | Nombre: " << obra->nombre
          << " | Tipo: " << obra->obra << " | Año: "

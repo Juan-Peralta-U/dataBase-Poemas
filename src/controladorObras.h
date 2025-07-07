@@ -16,6 +16,7 @@ class ControladorObras {
   ListaOrd<ObraPoetica*, unsigned int> listaPorIDAutor;
   ListaOrd<ObraPoetica*, unsigned int> listaPorIDEditorial;
   TreeRB<1000, ObraPoetica*> arbolObra;
+  TreeRB<1000, bool> obrasConEdiciones;
 
  public:
   void agregarObra(unsigned int IDOBRA, unsigned int IDAUTOR, tipoObra obraTipo,
