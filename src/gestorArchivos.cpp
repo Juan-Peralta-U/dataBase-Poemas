@@ -11,6 +11,8 @@
 
 using namespace std;
 
+
+// IDAUTOR,nombre,Apellido,sexo,fechaNacimiento_dia,fechaNacimiento_mes,fechaNacimiento_año,cidudadNacimiento,paisNacimiento,ciudadResidencia,formacion,añoIncio,añoPublicacion
 void cargarAutores(ControladorAutores& ctrlAutores,
                    const string& nombreArchivo) {
   ifstream archivo(nombreArchivo);
@@ -56,6 +58,7 @@ void cargarAutores(ControladorAutores& ctrlAutores,
   cout << "Autores cargados correctamente.\n";
 }
 
+// IDEDITORIAL,nombreEditorial,ciudadOficina,paisOficina
 void cargarObras(ControladorObras& ctrlObras, ControladorAutores& ctrlAutores,
                  const string& nombreArchivo) {
   ifstream archivo(nombreArchivo);
@@ -83,6 +86,7 @@ void cargarObras(ControladorObras& ctrlObras, ControladorAutores& ctrlAutores,
   cout << "Obras cargadas correctamente.\n";
 }
 
+// IDEDITORIAL,nombreEditorial,ciudadOficina,paisOficina
 void cargarEditoriales(ControladorEditoriales& ctrlEditoriales,
                        const string& nombreArchivo) {
   ifstream archivo(nombreArchivo);
@@ -108,6 +112,7 @@ void cargarEditoriales(ControladorEditoriales& ctrlEditoriales,
   cout << "Editoriales cargadas correctamente.\n";
 }
 
+// IDOBRA,IDEDITORIAL,numEdicion,fechaPublicacion,ciudadPublicacion
 void cargarEdiciones(ControladorObras& ctrlObras,
                      ControladorEditoriales& ctrlEditoriales,
                      const string& nombreArchivo) {
