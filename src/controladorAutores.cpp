@@ -1,9 +1,9 @@
-#include "controladorAutores.h"
+#include "controladorAutores.h" // Inclusión del archivo de cabecera correspondiente
 
-#include <iostream>
+#include <iostream> // Para entrada y salida estándar
 
 using namespace std;
-
+// Agrega un autor al sistema y lo inserta en todas las listas auxiliares y el árbol
 void ControladorAutores::agregarAutor(datosAutor* autor) {
   listaPorCiudadResidencia.insertarClave(autor, autor->ciudadResidencia[0]);
   listaPorCiudadNacimiento.insertarClave(autor, autor->cidudadNacimiento[0]);
@@ -14,6 +14,7 @@ void ControladorAutores::agregarAutor(datosAutor* autor) {
   listaPorSexo.insertarClave(autor, autor->sexo);
   arbolAutor.add(autor->IDAUTOR, autor);
 }
+// Elimina un autor del sistema y actualiza todas las listas ordenadas
 
 void ControladorAutores::eliminarAutor(unsigned int IDAUTOR) {
   datosAutor* del = arbolAutor.getNodeKey(IDAUTOR)->data;
@@ -27,6 +28,7 @@ void ControladorAutores::eliminarAutor(unsigned int IDAUTOR) {
   arbolAutor.deleteKey(del->IDAUTOR);
   delete del;
 }
+// Modifica un autor: actualiza listas auxiliares si cambian valores clave
 
 void ControladorAutores::modificarAutor(
     unsigned int IDAUTOR, bool sexo, int añoInicio, int añoPublicacion,
@@ -70,14 +72,17 @@ void ControladorAutores::modificarAutor(
     aux->sexo = sexo;
     listaPorSexo.insertarClave(aux, aux->sexo);
   }
+  // Actualización de datos simples
   aux->nombre = nombre;
   aux->Apellido = Apellido;
   for (int i = 0; i < 3; ++i) aux->fechaNacimiento[i] = fechaNacimiento[i];
 }
+// Busca un autor por su ID y retorna un puntero constante
 
 datosAutor const* ControladorAutores::buscarAutor(unsigned int IDAUTOR) {
   return arbolAutor.getNodeKey(IDAUTOR)->data;
 }
+// Muestra todos los autores registrados en el sistema
 
 void ControladorAutores::mostrarAutores() {
   cout << "\n--- LISTA DE AUTORES ---\n";
@@ -92,11 +97,11 @@ void ControladorAutores::mostrarAutores() {
          << endl;
   }
 }
-
+// Retorna todos los autores en forma de pila (inorden del árbol)
 pila<datosAutor*> ControladorAutores::getAutores() {
   return arbolAutor.inorden();
 }
-
+// Muestra los datos completos de un autor específico
 void ControladorAutores::mostrarAutor(unsigned int IDAUTOR) {
   cout << "\n--- DETALLES DEL AUTOR ---\n";
   datosAutor* autor = arbolAutor.getNodeKey(IDAUTOR)->data;
@@ -104,7 +109,7 @@ void ControladorAutores::mostrarAutor(unsigned int IDAUTOR) {
        << autor->Apellido << " | Sexo: " << (autor->sexo ? "M" : "F")
        << " | Ciudad residencia: " << autor->ciudadResidencia << endl;
 }
-
+// Muestra autores dados por una lista de ID, clasificados por ciudad y año de inicio
 void ControladorAutores::mostrarAutoresEditorial(Lista<unsigned int>* IDAUTOR) {
   cout << "\n--- AUTORES POR CIUDAD DE RESIDENCIA ---\n";
 
@@ -128,7 +133,7 @@ void ControladorAutores::mostrarAutoresEditorial(Lista<unsigned int>* IDAUTOR) {
          << autor->Apellido << " | Año inicio: " << autor->añoIncio << endl;
   }
 }
-
+// Muestra autores dentro de un rango de edad específico y con cierta formación
 void ControladorAutores::mostrarAutoresPorRangoyFormacion(int rangoEdad[2],
                                                           Formacion formacion) {
   cout << "\n--- AUTORES POR EDAD Y FORMACIÓN ---\n";
@@ -146,7 +151,7 @@ void ControladorAutores::mostrarAutoresPorRangoyFormacion(int rangoEdad[2],
          << " | Formación: " << static_cast<int>(autor->formacion) << endl;
   }
 }
-
+// Muestra autores por ciudad de nacimiento, según lista de ID autorizados
 void ControladorAutores::mostrarAutoresPorCiudadNacimiento(
     Lista<unsigned int>* IDAUTOR) {
   cout << "\n--- AUTORES POR CIUDAD DE NACIMIENTO ---\n";
@@ -160,6 +165,7 @@ void ControladorAutores::mostrarAutoresPorCiudadNacimiento(
          << " | Ciudad nacimiento: " << autor->cidudadNacimiento << endl;
   }
 }
+// Calcula la edad actual del autor a partir de su fecha de nacimiento
 
 int ControladorAutores::calcularEdadActual(int IDAUTOR) {
   datosAutor* autor = arbolAutor.getNodeKey(IDAUTOR)->data;
